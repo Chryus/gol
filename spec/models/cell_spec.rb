@@ -1,23 +1,27 @@
 require 'rails_helper'
 
 RSpec.describe Cell, type: :model do
-  subject { Cell.new }
+  
+  let(:game) { create :game }
+  let(:world) { create :world, game_id: game.id }
+  let(:cell) { create :cell, world_id: world.id, x: 0, y: 0 }
+  
 
   it 'should create a new cell subject' do
-    subject.is_a?(Cell).should be true
+    cell.is_a?(Cell).should be true
   end
 
   it 'should respond to proper methods' do
-    subject.should respond_to(:alive)
-    subject.should respond_to(:x)
-    subject.should respond_to(:y)
-    subject.should respond_to(:alive?)
-    subject.should respond_to(:die!)
+    cell.should respond_to(:alive)
+    cell.should respond_to(:x)
+    cell.should respond_to(:y)
+    cell.should respond_to(:alive?)
+    cell.should respond_to(:die!)
   end
 
   it 'should initialize properly' do
-    subject.alive.should be false
-    subject.x.should eq(0)
-    subject.y.should eq(0)
+    cell.alive.should be false
+    cell.x.should eq(0)
+    cell.y.should eq(0)
   end
 end

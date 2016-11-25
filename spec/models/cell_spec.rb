@@ -17,6 +17,7 @@ RSpec.describe Cell, type: :model do
     cell.should respond_to(:y)
     cell.should respond_to(:alive?)
     cell.should respond_to(:die!)
+    cell.should respond_to(:revive!)
   end
 
   it 'should initialize properly' do

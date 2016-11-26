@@ -2,12 +2,13 @@ require "rails_helper"
 
 RSpec.describe World, :type => :model do
   let(:game) { create(:game) }
-  let(:world) { create(:world, game_id: game.id) }
-  let(:cell) { create(:cell, x: 1, y: 1, world_id: world.id) }
+  let(:world) { game.world }
 
   before do
     world.build_cells
   end
+
+  let(:cell) { world.cells.find_by(x: 1, y: 1) }
     
   it 'should create a new world world' do
     world.is_a?(World).should be true

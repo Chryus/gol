@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Cell, type: :model do
   
   let(:game) { create :game }
-  let(:world) { create :world, game_id: game.id }
+  let(:world) { game.world }
   let(:cell) { create :cell, world_id: world.id, x: 0, y: 0 }
   
 

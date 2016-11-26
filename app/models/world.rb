@@ -1,12 +1,6 @@
 class World < ApplicationRecord
   has_many :cells
   
-  # col  0    1    2    x
-    # 0 [[0,0][1,0][2,0]]
-    # 1 [[0,1][1,1][2,1]]
-#row# 2 [[0,2][1,2][2,2]]
-#     y
-
   def give_life seeds=[0,1]
     if seeds.first.is_a?(Array)
       seeds.each { |seed| cells.find_by(x: seed[0], y: seed[1]).revive! }

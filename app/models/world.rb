@@ -21,6 +21,41 @@ class World < ApplicationRecord
       north = Cell.find_by(x: cell.x, y: cell.y-1)
       live_neighbors << north if north.alive?
     end
+    # northeast
+    if cell.y > 0 && cell.x < cols-1
+      northeast = Cell.find_by(x: cell.x+1, y: cell.y-1)
+      live_neighbors << northeast if northeast.alive?
+    end
+    # east
+    if cell.x < cols-1
+      east = Cell.find_by(x: cell.x+1, y: cell.y)
+      live_neighbors << east if east.alive?
+    end
+    # southeast
+    if cell.x < cols-1 && cell.y < rows-1
+      southeast = Cell.find_by(x: cell.x+1, y: cell.y+1)
+      live_neighbors << southeast if southeast.alive?
+    end
+    # south
+    if cell.y < rows-1
+      south = Cell.find_by(x: cell.x, y: cell.y+1)
+      live_neighbors << south if south.alive?
+    end
+    # southwest
+    if cell.x > 0 && cell.y < rows-1
+      southwest = Cell.find_by(x: cell.x-1, y: cell.y+1)
+      live_neighbors << southwest if southwest.alive?
+    end
+    # west
+    if cell.x > 0
+      west = Cell.find_by(x: cell.x-1, y: cell.y)
+      live_neighbors << west if west.alive?
+    end
+    # northwest
+    if cell.x > 0 && cell.y > 0
+      northwest = Cell.find_by(x: cell.x-1, y: cell.y-1)
+      live_neighbors << northwest if northwest.alive?
+    end
     live_neighbors
   end
 

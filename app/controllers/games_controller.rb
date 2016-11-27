@@ -2,8 +2,8 @@ class GamesController < ApplicationController
   respond_to :html, :json
 
   def life
-    @height = 910
-    @width = 1110
+    @height = 600
+    @width = 1000
     @cols = @width/10
     @rows = @height/10
     @world = World.new(@cols, @rows)

@@ -7,7 +7,7 @@ end
 
 class Window < Gosu::Window
 
-  def initialize(height=800, width=600)
+  def initialize(height=800, width=100)
     @height = height
     @width = width
     super height, width, false

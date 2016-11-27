@@ -1,4 +1,4 @@
-class Game
+class Game < ApplicationRecord
 
   attr_accessor :world, :seeds
 

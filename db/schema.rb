@@ -10,28 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161125145612) do
+ActiveRecord::Schema.define(version: 20161127201516) do
 
-  create_table "cells", force: :cascade do |t|
-    t.boolean  "alive",      default: false
-    t.integer  "x"
-    t.integer  "y"
-    t.integer  "world_id"
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
-  end
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
   create_table "games", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "worlds", force: :cascade do |t|
-    t.integer  "rows"
-    t.integer  "cols"
-    t.integer  "game_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer "cell_grid", array: true
+    t.index ["cell_grid"], name: "index_games_on_cell_grid", using: :gin
   end
 
 end

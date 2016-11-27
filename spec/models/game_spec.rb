@@ -81,7 +81,6 @@ RSpec.describe Game, type: :model do
         world.cell_grid[2][1].should be_alive
         world.cell_grid[2][2].should be_alive
       end
-
     end
 
     context 'Rule 3: Any live cell with more than three live neighbours dies, as if by overcrowding.' do

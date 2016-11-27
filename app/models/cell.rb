@@ -1,15 +1,22 @@
-class Cell < ApplicationRecord
-  belongs_to :world
+class Cell
 
-  def die! 
-    self.update_attributes(alive: false)
+  attr_accessor :alive, :x, :y
+
+  def initialize(x=0, y=0)
+    @alive = false
+    @x = x
+    @y = y
+  end
+
+  def die!
+    self.alive = false
   end
 
   def revive!
-    self.update_attributes(alive: true)
+    self.alive = true
   end
 
-  def dead?
-    !alive
-  end
+  def alive?; alive; end
+
+  def dead?; !alive; end
 end

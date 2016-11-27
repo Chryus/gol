@@ -1,11 +1,18 @@
-class Game < ApplicationRecord
-  has_one :world
-  has_many :cells, through: :world
+class Game
+
+  attr_accessor :world, :seeds
+
+  def initialize(world=World.new, seeds=[])
+    @world = world
+    @seeds = seeds
+
+    seeds.each { |seed| world.cell_grid[seed[0]][seed[1]].alive = true }
+  end
 
   def tick!
     live_cells_next_round = []
     dead_cells_next_round = []
-    cells.each do |cell|
+    world.cells.each do |cell|
       if cell.alive? # rules 1, 2 & 3
         if world.live_neighbors(cell).count.between?(2,3)
           live_cells_next_round << cell

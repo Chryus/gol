@@ -1,9 +1,9 @@
 #gosu file
 
 require 'gosu'
-Dir.glob('./lib/*.rb') do |model|
-  require_relative model
-end
+# Dir.glob('./lib/*.rb') do |model|
+#   require_relative model
+# end
 
 class Window < Gosu::Window
 
@@ -24,15 +24,14 @@ class Window < Gosu::Window
 
     @col_width = width/@cols #width div by number of cols
     @row_height = height/@rows #height div by number of rows
-
     @world = World.new(@cols, @rows)
     @game = Game.new(@world)
     @game.world.randomly_populate
   end
 
   def update
-    sleep 0.1
-    @game.tick!
+    # sleep 10
+    # @game.tick!
   end
 
   def draw
@@ -40,7 +39,7 @@ class Window < Gosu::Window
               width, 0, @background_color, #top right corner 
               width, height, @background_color, #bottom right
               0, height, @background_color) #bottom left
-
+    debugger
     @game.world.cells.each do |cell|
       if cell.alive?
         draw_quad(cell.x * @col_width, cell.y * @row_height, @alive_color,

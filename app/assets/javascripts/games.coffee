@@ -6,8 +6,17 @@ $ ->
   bh = 600
   p = 10
   canvas = document.getElementsByTagName('canvas')
-  context = canvas[0].getContext('2d')
+  ctx = canvas[0].getContext('2d')
+
   drawBoard = ->
+    $.get '/life.json', (data) ->
+      data.cell_grid.forEach (row) ->
+        row.forEach (cell) ->
+          if cell.alive == true
+            ctx.fillStyle = "#0ff"
+          else
+            ctx.fillStyle = "#fa00ff"
+          ctx.fillRect(cell.x*data.col_width, cell.y * data.row_height, data.col_width, data.row_height);
 
   drawBoard()
 

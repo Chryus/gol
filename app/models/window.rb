@@ -7,7 +7,7 @@ end
 
 class Window < Gosu::Window
 
-  def initialize(height=800, width=100)
+  def initialize(height=800, width=600)
     @height = height
     @width = width
     super height, width, false
@@ -19,7 +19,7 @@ class Window < Gosu::Window
     @dead_color = Gosu::Color.new(0xffff00ff)
 
     #game itself
-    @cols = width/10
+    @cols = width/10 
     @rows = height/10
 
     @col_width = width/@cols #width div by number of cols

@@ -16,19 +16,17 @@
  */
 .container {
   width: 1440px;
-  position: relative;
   margin-left: auto;
   margin-right: auto;
-}
-
-.container canvas {
-  width: 96%;
-  height: 83%;
 }
 
 header {
   margin-top: 20px;
   text-align: center;
+  @media screen and (max-width: 577px) {
+    float: left;
+    margin-left: 2%;
+  }
 }
 
 .start { 
@@ -36,11 +34,18 @@ header {
   margin-top: -2%;
   margin-bottom: 1%;
   margin-right: 2%;
+  @media screen and (max-width: 577px) {
+    float: left;
+    margin-left: 2%;
+    margin-top: 1%;
+  }
 }
 
 p { margin-top: -3px; }
 
 canvas {
+  width: 96%;
+  height: 83%;
   padding-left: 0;
   padding-right: 0;
   margin-left: auto;

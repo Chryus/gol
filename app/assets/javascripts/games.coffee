@@ -133,7 +133,9 @@ $ ->
 
   game = new Game
 
-  callBack = () ->
-    game.tick()
+  $('.start').click ->
+    this.disabled = true
+    callBack = () ->
+      game.tick()
 
-  window.setInterval(callBack, 150);
+    window.setInterval(callBack, 150);

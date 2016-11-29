@@ -21,10 +21,24 @@
   margin-right: auto;
 }
 
+.container canvas {
+  width: 96%;
+  height: 83%;
+}
+
 header {
   margin-top: 20px;
   text-align: center;
 }
+
+.start { 
+  float: right;
+  margin-top: -2%;
+  margin-bottom: 1%;
+  margin-right: 2%;
+}
+
+p { margin-top: -3px; }
 
 canvas {
   padding-left: 0;
@@ -33,4 +47,5 @@ canvas {
   margin-right: auto;
   display: block;
   background: black;
+  clear: both;
 }

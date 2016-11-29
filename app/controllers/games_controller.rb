@@ -15,6 +15,7 @@ class GamesController < ApplicationController
                  width: @width,
                  col_width: @col_width, 
                  row_height: @row_height,
-                 cells: @world.cells
+                 cells: @world.cells,
+                 cell_grid: @world.cell_grid
   end
 end

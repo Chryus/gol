@@ -1,6 +1,3 @@
-# Place all the behaviors and hooks related to the matching controller here.
-# All this logic will automatically be available in application.js.
-# You can use CoffeeScript in this file: http://coffeescript.org/
 $ ->
   class Game
     constructor: () ->
@@ -18,14 +15,33 @@ $ ->
       @cells = @world.cells
       @drawBoard()
       @revolutions = 0
-        
+      @nIntervId = null
+      @setEvents()
+
+    setEvents: () =>
+      $('.start, .stop').on 'click', @toggleLife
+
+    toggleLife: () ->
+      value = $(this).html()
+      if value == 'Start' and $(this).is(':visible')
+        callBack = () ->
+          game.tick()
+        nIntervId = setInterval(callBack, 150)
+        game.nIntervId = nIntervId
+        $('.stop').fadeIn(600)
+      else if value == 'Stop' and $(this).is(':visible')
+        clearInterval(game.nIntervId)
+        $('.start').fadeIn(600)
+      $(this).hide()
+      return
+
     drawBoard: () =>
       @cells.forEach (cell) =>
         if cell.alive == true
           @ctx.fillStyle = '#0ff'
         else
           @ctx.fillStyle = '#fa00ff'
-        @ctx.fillRect(cell.x * @colWidth, cell.y * @rowHeight, @colWidth - 1, @rowHeight - 1);
+        @ctx.fillRect(cell.x * @colWidth, cell.y * @rowHeight, @colWidth - 1, @rowHeight - 1)
 
     tick: () =>
       liveCellsNextRound = []
@@ -119,23 +135,16 @@ $ ->
       @x = x
       @y = y
 
-    die: =>
+    die: ->
       alive = false
 
-    revive: =>
+    revive: ->
       alive = true
 
-    alive: =>
+    alive: ->
       alive
 
-    dead: =>
+    dead: ->
       !alive
 
   game = new Game
-
-  $('.start').click ->
-    this.disabled = true
-    callBack = () ->
-      game.tick()
-
-    window.setInterval(callBack, 150);

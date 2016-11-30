@@ -29,17 +29,20 @@ header {
   }
 }
 
-.start { 
+.btn { 
   float: right;
   margin-top: -2%;
   margin-bottom: 1%;
   margin-right: 2%;
   @media screen and (max-width: 577px) {
     float: left;
+    margin-right: 0%;
     margin-left: 2%;
     margin-top: 1%;
-  }
+  } 
 }
+
+.stop { display: none; }
 
 p { margin-top: -3px; }
 

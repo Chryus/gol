@@ -79,7 +79,6 @@ $ ->
           @cells.push(cell)
           rowArray.push(cell)
           j++
-        console.log(rowArray)
         @cell_grid.push(rowArray)
         j = 0
         i++

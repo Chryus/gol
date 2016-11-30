@@ -15,7 +15,8 @@
  *= require_self
  */
 .container {
-  width: 1440px;
+  background: #fff;
+  width: 1340px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -34,9 +35,10 @@ header {
   margin-top: -2%;
   margin-bottom: 1%;
   margin-right: 2%;
+  clear: both;
   @media screen and (max-width: 577px) {
     float: left;
-    margin-right: 0%;
+    margin-right: 0;
     margin-left: 2%;
     margin-top: 1%;
   } 

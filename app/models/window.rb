@@ -39,7 +39,6 @@ class Window < Gosu::Window
               width, 0, @background_color, #top right corner 
               width, height, @background_color, #bottom right
               0, height, @background_color) #bottom left
-    debugger
     @game.world.cells.each do |cell|
       if cell.alive?
         draw_quad(cell.x * @col_width, cell.y * @row_height, @alive_color,

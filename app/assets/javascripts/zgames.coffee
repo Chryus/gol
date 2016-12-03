@@ -20,9 +20,27 @@ $ ->
       @setEvents()
 
     setEvents: () =>
-      $('.start, .stop').on 'click', @toggleLife
+      $('.start, .stop').on 'click', @toggleGame
+      if @revolutions == 0
+        $('canvas').on 'click', @toggleCellLife
+          
+    toggleCellLife: () =>
+      coords = @getCursorCoords()
+      cell = @cellGrid[coords[1]][coords[0]]
+      if cell.dead() then cell.revive() else cell.die()
+      @drawCell(cell)
 
-    toggleLife: () ->
+    getCursorCoords: () =>
+      rect = @canvas.getBoundingClientRect()
+      x = @normalizeCoord(event.clientX - rect.left)
+      y = @normalizeCoord(event.clientY - rect.top)
+      console.log("x: " + x + " y: " + y)
+      return [x, y]
+
+    normalizeCoord: (coord) ->
+      if coord < 10 then 0 else Math.floor(coord/10)
+
+    toggleGame: () ->
       value = $(this).html()
       isVisible = $(this).is(':visible')
       if value == 'Start' and isVisible
@@ -39,11 +57,12 @@ $ ->
 
     drawBoard: () =>
       @cells.forEach (cell) =>
-        if cell.alive == true
-          @ctx.fillStyle = '#0ff'
-        else
-          @ctx.fillStyle = '#fa00ff'
+        @ctx.fillStyle = if cell.alive then '#0ff' else '#fa00ff'
         @ctx.fillRect(cell.x * @colWidth, cell.y * @rowHeight, @colWidth - 1, @rowHeight - 1)
+
+    drawCell: (cell) =>
+      @ctx.fillStyle = if cell.alive then '#0ff' else '#fa00ff'
+      @ctx.fillRect(cell.x * @colWidth, cell.y * @rowHeight, @colWidth - 1, @rowHeight - 1)
 
     tick: () =>
       liveCellsNextRound = []

@@ -6,13 +6,13 @@ $ ->
       @y = y
 
     die: ->
-      alive = false
+      this.alive = false
 
     revive: ->
-      alive = true
+      this.alive = true
 
     alive: ->
-      alive
+      this.alive
 
     dead: ->
-      !alive
+      !this.alive

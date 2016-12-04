@@ -16,19 +16,30 @@ $ ->
       @world.randomlyPopulate()
       @drawBoard()
       @revolutions = 0
-      @nIntervId = null
+      @drawTimer = null
+      @enableDraw = false
+      @enableHandler = false
+      @tickNntervId = null
+      @cellSelectNtervId
       @setEvents()
 
     setEvents: () =>
       $('.start, .stop').on 'click', @toggleGame
-      if @revolutions == 0
-        $('canvas').on 'click', @toggleCellLife
-          
+      $('canvas').on 'mousemove', @toggleCellLife
+      $('canvas').mousedown ->
+        game.enableDraw = true
+      $('canvas').mouseup ->
+        game.enableDraw = false
+
     toggleCellLife: () =>
-      coords = @getCursorCoords()
-      cell = @cellGrid[coords[1]][coords[0]]
-      if cell.dead() then cell.revive() else cell.die()
-      @drawCell(cell)
+      console.log("DRAWFLAG " + @enableDraw)
+      if @enableDraw == true 
+        coords = @getCursorCoords()
+        console.log(coords)
+        cell = @cellGrid[coords[1]][coords[0]]
+        cell.revive()
+        #if cell.dead() then cell.revive() else cell.die()
+        @drawCell(cell)
 
     getCursorCoords: () =>
       rect = @canvas.getBoundingClientRect()
@@ -46,8 +57,8 @@ $ ->
       if value == 'Start' and isVisible
         callBack = () ->
           game.tick()
-        nIntervId = setInterval(callBack, 150)
-        game.nIntervId = nIntervId
+        tickNntervId = setInterval(callBack, 150)
+        game.tickNntervId = tickNntervId
         $('.stop').fadeIn(600)
       else if value == 'Stop' and isVisible
         clearInterval(game.nIntervId)

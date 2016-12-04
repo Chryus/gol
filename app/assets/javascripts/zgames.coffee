@@ -15,34 +15,39 @@ $ ->
       @cells = @world.cells
       @world.randomlyPopulate()
       @drawBoard()
+      @callbacks = {}
+      @mySlider = $("#ex4").slider({ reversed : true});
       @revolutions = 0
       @drawTimer = null
       @enableDraw = false
-      @enableHandler = false
-      @tickNntervId = null
-      @cellSelectNtervId
+      @timer = null
       @setEvents()
 
     setEvents: () =>
       $('.start, .stop').on 'click', @toggleGame
-      $('canvas').on 'mousemove', @toggleCellLife
+      $('canvas').on 'mousemove', @reanimateCell
       $('canvas').mousedown ->
         game.enableDraw = true
       $('canvas').mouseup ->
         game.enableDraw = false
+      @mySlider.on 'slideStop', @updateInterval
 
-    toggleCellLife: () =>
+    updateInterval: () =>
+      clearInterval(@timer)
+      @timer = setInterval(@callbacks['tick'], @mySlider.val()*50/5)
+
+    reanimateCell: () =>
       console.log("DRAWFLAG " + @enableDraw)
       if @enableDraw == true 
         coords = @getCursorCoords()
         console.log(coords)
         cell = @cellGrid[coords[1]][coords[0]]
         cell.revive()
-        #if cell.dead() then cell.revive() else cell.die()
         @drawCell(cell)
 
     getCursorCoords: () =>
       rect = @canvas.getBoundingClientRect()
+      console.log(rect)
       x = @normalizeCoord(event.clientX - rect.left)
       y = @normalizeCoord(event.clientY - rect.top)
       console.log("x: " + x + " y: " + y)
@@ -55,21 +60,19 @@ $ ->
       value = $(this).html()
       isVisible = $(this).is(':visible')
       if value == 'Start' and isVisible
-        callBack = () ->
-          game.tick()
-        tickNntervId = setInterval(callBack, 150)
-        game.tickNntervId = tickNntervId
+        game.callbacks['tick'] = callBack = () ->
+                                   game.tick()
+        game.timer = setInterval(game.callbacks['tick'], 150)
         $('.stop').fadeIn(600)
       else if value == 'Stop' and isVisible
-        clearInterval(game.nIntervId)
+        clearInterval(game.timer)
         $('.start').fadeIn(600)
       $(this).hide()
       return
 
     drawBoard: () =>
       @cells.forEach (cell) =>
-        @ctx.fillStyle = if cell.alive then '#0ff' else '#fa00ff'
-        @ctx.fillRect(cell.x * @colWidth, cell.y * @rowHeight, @colWidth - 1, @rowHeight - 1)
+        @drawCell(cell)
 
     drawCell: (cell) =>
       @ctx.fillStyle = if cell.alive then '#0ff' else '#fa00ff'

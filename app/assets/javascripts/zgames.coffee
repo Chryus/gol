@@ -15,10 +15,11 @@ $ ->
       @cells = @world.cells
       @world.randomlyPopulate()
       @drawBoard()
-      @callbacks = {}
-      @mySlider = $("#ex4").slider({ reversed : true});
+      @callbacks = {'tick': callBack = () -> game.tick()}
+      @velocitySlider = $("#ex4").slider({ reversed : true});
       @revolutions = 0
-      @drawTimer = null
+      @started = false
+      @delay = 150
       @enableDraw = false
       @timer = null
       @setEvents()
@@ -30,11 +31,16 @@ $ ->
         game.enableDraw = true
       $('canvas').mouseup ->
         game.enableDraw = false
-      @mySlider.on 'slideStop', @updateInterval
+      @velocitySlider.on 'change', @calcInterval
 
-    updateInterval: () =>
+    calcInterval: () =>
       clearInterval(@timer)
-      @timer = setInterval(@callbacks['tick'], @mySlider.val()*50/5)
+      maxValue = @velocitySlider.data().sliderMax
+      @delay = Math.abs(@velocitySlider.val() - maxValue) * 10
+      if @started then @startTimer()
+
+    startTimer: () =>
+      @timer = setInterval(@callbacks['tick'], @delay)
 
     reanimateCell: () =>
       console.log("DRAWFLAG " + @enableDraw)
@@ -60,11 +66,11 @@ $ ->
       value = $(this).html()
       isVisible = $(this).is(':visible')
       if value == 'Start' and isVisible
-        game.callbacks['tick'] = callBack = () ->
-                                   game.tick()
-        game.timer = setInterval(game.callbacks['tick'], 150)
+        game.started = true
+        game.calcInterval()
         $('.stop').fadeIn(600)
       else if value == 'Stop' and isVisible
+        game.started = false
         clearInterval(game.timer)
         $('.start').fadeIn(600)
       $(this).hide()

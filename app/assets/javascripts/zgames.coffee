@@ -13,7 +13,6 @@ $ ->
       @world = new App.World(@cols, @rows)
       @cellGrid = @world.cellGrid
       @cells = @world.cells
-      @world.randomlyPopulate()
       @drawBoard()
       @callbacks = {'tick': callBack = () -> game.tick()}
       @velocitySlider = $("#ex4").slider({ reversed : true});
@@ -25,13 +24,24 @@ $ ->
       @setEvents()
 
     setEvents: () =>
-      $('.start, .stop').on 'click', @toggleGame
+      $('.start, .stop').on 'click', @handleGameToggle
+      $('.randomize').on 'click', @handleRandomize
+      $('.clear').on 'click', @handleClear
       $('canvas').on 'mousemove', @reanimateCell
       $('canvas').mousedown ->
         game.enableDraw = true
       $('canvas').mouseup ->
         game.enableDraw = false
       @velocitySlider.on 'change', @calcInterval
+
+    handleClear: () =>
+      debugger
+      @world.killAllCells()
+      @drawBoard()
+
+    handleRandomize: () =>
+      @world.randomlyPopulate()
+      @drawBoard()
 
     calcInterval: () =>
       clearInterval(@timer)
@@ -62,7 +72,7 @@ $ ->
     normalizeCoord: (coord) ->
       if coord < 10 then 0 else Math.floor(coord/10)
 
-    toggleGame: () ->
+    handleGameToggle: () ->
       value = $(this).html()
       isVisible = $(this).is(':visible')
       if value == 'Start' and isVisible

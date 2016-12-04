@@ -58,6 +58,9 @@ $ ->
         return cell.alive == true
       )
 
+    killAllCells: () =>
+      @cells.forEach (cell) -> cell.die()
+
     randomlyPopulate: () =>
       @cells.forEach (cell) ->
         cell.alive = !!Math.floor(Math.random() * 2)

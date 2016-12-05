@@ -1,3 +1,3 @@
 let square = (x) => x * x
 
-alert(square(4));
+//alert(square(4));

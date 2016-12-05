@@ -1,26 +1,18 @@
 $(function() {
   class Cell {
     constructor(alive, x, y) {
-      this.alive = alive
-      this.x = x
-      this.y = y
+      this.alive = alive;
+      this.x = x;
+      this.y = y;
     }
 
-    die () {
-      this.alive = false;
-    }
+    die () { this.alive = false; }
 
-    revive () {
-      this.alive = true
-    }
+    revive () { this.alive = true; }
 
-    alive () {
-      this.alive
-    }
+    alive () { this.alive; }
 
-    dead () {
-      this.alive
-    }
+    dead () { this.alive; }
   }
   App['Cell'] = Cell
 });

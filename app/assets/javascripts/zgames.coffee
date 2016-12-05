@@ -26,6 +26,7 @@ $ ->
     setEvents: () =>
       $('.start, .stop').on 'click', @handleGameToggle
       $('.randomize').on 'click', @handleRandomize
+      #$('.glider').on 'click', @handleGlider
       $('.clear').on 'click', @handleClear
       $('canvas').on 'mousemove', @reanimateCell
       $('canvas').mousedown ->
@@ -34,8 +35,9 @@ $ ->
         game.enableDraw = false
       @velocitySlider.on 'change', @calcInterval
 
+    handleGlider: () =>
+
     handleClear: () =>
-      debugger
       @world.killAllCells()
       @drawBoard()
 

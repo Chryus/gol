@@ -12,10 +12,8 @@ class GamesController < ApplicationController
     @world.randomly_populate
     #@game = Game.create(cells: @world.cells)
     respond_with cols: @cols,
-                 width: @width,
+                 rows: @rows,
                  col_width: @col_width, 
-                 row_height: @row_height,
-                 cells: @world.cells,
-                 cell_grid: @world.cell_grid
+                 row_height: @row_height
   end
 end

@@ -43,3 +43,15 @@ canvas {
   background: black;
   clear: both;
 }
+
+.slider {
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .btn {
+    float: left;
+    margin-left: 10%;
+    margin-bottom: 1.5%;
+  }
+}

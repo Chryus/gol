@@ -28,8 +28,8 @@ RSpec.describe Game, type: :model do
 
     # col  0    1    2    y
     # 0 [[0,0][1,0][2,0]]
-    # 1 [[1,0][1,1][2,1]]
-#row# 2 [[2,0][2,1][2,2]]
+    # 1 [[0,1][1,1][2,1]]
+#row# 2 [[0,2][1,2][2,2]]
 #     x
 
     let!(:game) { Game.new }
@@ -48,7 +48,7 @@ RSpec.describe Game, type: :model do
         game = Game.new(world, [[0,1], [1,1]])
         world.live_neighbors(cell).count.should eq(1)
         game.tick!
-        world.cell_grid[0][1].should be_dead
+        world.cell_grid[1][0].should be_dead
         world.cell_grid[1][1].should be_dead
       end
 

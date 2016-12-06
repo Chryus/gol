@@ -9,11 +9,11 @@ class Cell
   end
 
   def die!
-    alive = false
+    self.alive = false
   end
 
   def revive!
-    alive = true
+    self.alive = true
   end
 
   def alive?; alive; end

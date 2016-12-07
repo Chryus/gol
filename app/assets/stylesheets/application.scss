@@ -48,6 +48,13 @@ canvas {
   display: block;
 }
 
+@media (max-width: 1221px) { 
+  .btn { 
+    margin-left: 4%;
+    margin-right: 0; 
+  }
+}
+
 @media (max-width: 768px) {
   .btn {
     float: left;

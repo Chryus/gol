@@ -74,6 +74,12 @@ GEM
       activesupport (>= 4.1.0)
     gosu (0.10.5)
     i18n (0.7.0)
+    jasmine (2.4.0)
+      jasmine-core (~> 2.4)
+      phantomjs
+      rack (>= 1.2.1)
+      rake
+    jasmine-core (2.5.1)
     jbuilder (2.6.0)
       activesupport (>= 3.0.0, < 5.1)
       multi_json (~> 1.2)
@@ -99,6 +105,7 @@ GEM
     nokogiri (1.6.8.1)
       mini_portile2 (~> 2.1.0)
     pg (0.18.4)
+    phantomjs (2.1.1.0)
     puma (3.6.2)
     rack (2.0.1)
     rack-test (0.6.3)
@@ -196,6 +203,7 @@ DEPENDENCIES
   coffee-rails (~> 4.2)
   factory_girl_rails
   gosu (= 0.10.5)
+  jasmine
   jbuilder (~> 2.5)
   jquery-rails
   listen (~> 3.0.5)

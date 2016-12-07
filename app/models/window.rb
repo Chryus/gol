@@ -31,7 +31,7 @@ class Window < Gosu::Window
 
   def update
     # sleep 10
-    # @game.tick!
+    @game.tick!
   end
 
   def draw

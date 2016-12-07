@@ -10,9 +10,9 @@ $(function() {
 
     revive () { this.alive = true; }
 
-    alive () { this.alive; }
+    isAlive () { return this.alive; }
 
-    dead () { this.alive; }
+    dead () { return !this.alive; }
   }
   App['Cell'] = Cell
 });

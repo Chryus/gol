@@ -29,42 +29,42 @@ $(function() {
       //north
       if (cell.y > 0) {
         let north = this.cellGrid[cell.y - 1][cell.x];
-        if (north.alive) liveNeighbors.push(north);
+        if (north.isAlive()) liveNeighbors.push(north);
       }
       //northeast
       if (cell.y > 0 && cell.x < this.cols - 1) {
         let northeast = this.cellGrid[cell.y - 1][cell.x + 1];
-        if (northeast.alive) liveNeighbors.push(northeast);
+        if (northeast.isAlive()) liveNeighbors.push(northeast);
       }
       //east
       if (cell.x < this.cols - 1) {
         let east = this.cellGrid[cell.y][cell.x + 1];
-        if (east.alive) liveNeighbors.push(east);
+        if (east.isAlive()) liveNeighbors.push(east);
       }
       //southeast
       if (cell.y < this.rows - 1 && cell.x < this.cols - 1) {
         let southeast = this.cellGrid[cell.y + 1][cell.x + 1];
-        if (southeast.alive) liveNeighbors.push(southeast);
+        if (southeast.isAlive()) liveNeighbors.push(southeast);
       }
       //south
       if (cell.y < this.rows - 1) {
         let south = this.cellGrid[cell.y + 1][cell.x];
-        if (south.alive) liveNeighbors.push(south);
+        if (south.isAlive()) liveNeighbors.push(south);
       }
       //southwest
       if (cell.x > 0 && cell.y < this.rows - 1) {
         let southwest = this.cellGrid[cell.y + 1][cell.x - 1];
-        if (southwest.alive) liveNeighbors.push(southwest);
+        if (southwest.isAlive()) liveNeighbors.push(southwest);
       }
       //west
       if (cell.x > 0) {
         let west = this.cellGrid[cell.y][cell.x - 1];
-        if (west.alive) liveNeighbors.push(west);
+        if (west.isAlive()) liveNeighbors.push(west);
       }
       //northwest
       if (cell.x > 0 && cell.y > 0) {
         let northwest = this.cellGrid[cell.y - 1][cell.x - 1];
-        if (northwest.alive) liveNeighbors.push(northwest);
+        if (northwest.isAlive()) liveNeighbors.push(northwest);
       }
       return liveNeighbors;
     }

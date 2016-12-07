@@ -104,7 +104,7 @@ $(function() {
       this.cells.forEach( (cell) => {
         let neighbors = this.world.liveNeighbors(cell).length;
         let square = (x) => x * x
-        if (cell.alive == true) {// rules 1, 2 & 3
+        if (cell.isAlive() === true) {// rules 1, 2 & 3
           if (neighbors == 2 || neighbors == 3) {
             liveCellsNextRound.push(cell);
           } else {
@@ -128,7 +128,7 @@ $(function() {
     }
 
     drawCell (cell) {
-      this.ctx.fillStyle = cell.alive ? '#0ff' : '#fa00ff';
+      this.ctx.fillStyle = cell.isAlive() ? '#0ff' : '#fa00ff';
       this.ctx.fillRect(cell.x * this.colWidth, 
         cell.y * this.rowHeight, 
         this.colWidth - 1, 

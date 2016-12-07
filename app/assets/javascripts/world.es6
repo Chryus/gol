@@ -69,6 +69,10 @@ $(function() {
       return liveNeighbors;
     }
 
+    liveCells() {
+      return this.cells.filter(cell => cell.alive === true);
+    }
+
     killAllCells () {
       this.cells.forEach(cell => { cell.die() });
     }

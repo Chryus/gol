@@ -43,10 +43,10 @@ $(function() {
 
     drawPattern () {
       if (game.enablePattern === false) { return };
+      let patternCells = [];
+      let coords = game.getCoords();
+      let cell = game.world.cellGrid[coords[1]][coords[0]];
       if (game.pattern === "Glider") {
-        let patternCells = [];
-        let coords = game.getCoords();
-        let cell = game.world.cellGrid[coords[1]][coords[0]];
         if ((cell.x > 1 && cell.x < game.cols-2) && 
           (cell.y > 1 && cell.y < game.rows-2)) {
           patternCells.push.apply(patternCells,
@@ -54,12 +54,23 @@ $(function() {
             game.world.cellGrid[cell.y-1][cell.x], // north 
             game.world.cellGrid[cell.y][cell.x-1], // west
             game.world.cellGrid[cell.y-1][cell.x-2]]); // north 1 west 2
-          patternCells.forEach( (cell) => {
-            cell.revive();
-            game.drawCell(cell);
-          });
+          
         }
+      } else if (cell.x > 3 && cell.y > 2) {
+        patternCells.push.apply(patternCells,
+            [cell, game.world.cellGrid[cell.y-2][cell.x],
+            game.world.cellGrid[cell.y-1][cell.x],
+            game.world.cellGrid[cell.y][cell.x-1],
+            game.world.cellGrid[cell.y][cell.x-2],
+            game.world.cellGrid[cell.y][cell.x-3],
+            game.world.cellGrid[cell.y-1][cell.x-4],
+            game.world.cellGrid[cell.y-3][cell.x-4],
+            game.world.cellGrid[cell.y-3][cell.x-1]]);
       }
+      patternCells.forEach( (cell) => {
+        cell.revive();
+        game.drawCell(cell);
+      });
     }
 
     handleClear () {

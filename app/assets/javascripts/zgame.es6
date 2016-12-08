@@ -43,19 +43,22 @@ $(function() {
 
     drawPattern () {
       if (game.enablePattern === false) { return };
-      if (game.pattern == "Glider") {
+      if (game.pattern === "Glider") {
         let patternCells = [];
         let coords = game.getCoords();
         let cell = game.world.cellGrid[coords[1]][coords[0]];
-        patternCells.push.apply(patternCells,
-          [cell, game.world.cellGrid[cell.y-2][cell.x], // north 1 
-          game.world.cellGrid[cell.y-1][cell.x], // north 
-          game.world.cellGrid[cell.y][cell.x-1], // west
-          game.world.cellGrid[cell.y-1][cell.x-2]]); // north 1 west 2
-        patternCells.forEach( (cell) => {
-          cell.revive();
-          game.drawCell(cell);
-        });
+        if ((cell.x > 1 && cell.x < game.cols-2) && 
+          (cell.y > 1 && cell.y < game.rows-2)) {
+          patternCells.push.apply(patternCells,
+            [cell, game.world.cellGrid[cell.y-2][cell.x], // north 1 
+            game.world.cellGrid[cell.y-1][cell.x], // north 
+            game.world.cellGrid[cell.y][cell.x-1], // west
+            game.world.cellGrid[cell.y-1][cell.x-2]]); // north 1 west 2
+          patternCells.forEach( (cell) => {
+            cell.revive();
+            game.drawCell(cell);
+          });
+        }
       }
     }
 

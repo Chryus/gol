@@ -26,7 +26,6 @@ header {
 .btn {
   display: block;
   margin-bottom: 5%;
-  margin-right: 14%;
   float: right;
   clear: both;
 }
@@ -44,6 +43,15 @@ canvas {
   clear: both;
 }
 
+.controls {
+  float: right;
+  margin-right: 2%;
+  padding: 1%;
+  background: lightgoldenrodyellow;
+  border-radius: 10px;
+}
+
+
 .slider {
   display: block;
 }
@@ -55,10 +63,10 @@ canvas {
   }
 }
 
+
 @media (max-width: 768px) {
   .btn {
-    float: left;
-    margin-left: 10%;
+    float: right;
     margin-bottom: 1.5%;
   }
 }

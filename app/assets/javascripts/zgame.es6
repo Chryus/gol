@@ -18,8 +18,8 @@ $(function() {
       this.started = false;
       this.delay = 150;
       this.enableDraw = false;
-      this.enablePattern = false;
-      this.pattern = null;
+      this.enableOffset = false;
+      this.pattern = $("input[type=radio]:checked").val();
       this.timer = null;
       this.setEvents();
     }
@@ -29,45 +29,89 @@ $(function() {
       $('.randomize').on('click', this.handleRandomize);
       $('.clear').on('click', this.handleClear);
       $('input').on('click', this.handlePatternSelect);
-      $('canvas').on('click', this.drawPattern);
-      $('canvas').on('mousemove', this.reanimateCell);
-      $('canvas').mousedown(function () { game.enableDraw = true; });
-      $('canvas').mouseup(function () { game.enableDraw = false; });
+      $('canvas').mousedown(function () { 
+        game.enableDraw = true;
+        game.enableOffset = true;
+      });
+      $('canvas').mouseup(function () { 
+        game.enableDraw = false; 
+        game.enableOffset = false; 
+      });
+      $('canvas').mousemove(function () { game.drawPattern(); });
+      $('canvas').click(function () {
+        game.enableDraw = true;
+        game.drawPattern()
+        game.enableDraw = false;
+      });
       this.velocitySlider.on('change', this.calcInterval);
     }
 
     handlePatternSelect () {
-      game.pattern = $("input[type=radio]:checked").parent().text().trim();
-      game.enablePattern = true;
+      let name = $("input[type=radio]:checked").val();
+      game.pattern = name;
     }
 
-    drawPattern () {
-      if (game.enablePattern === false) { return };
+    calcPattern () {
+      let midpoint = game.cols/2;
       let patternCells = [];
       let coords = game.getCoords();
       let cell = game.world.cellGrid[coords[1]][coords[0]];
-      if (game.pattern === "Glider") {
-        if ((cell.x > 1 && cell.x < game.cols-2) && 
-          (cell.y > 1 && cell.y < game.rows-2)) {
-          patternCells.push.apply(patternCells,
-            [cell, game.world.cellGrid[cell.y-2][cell.x], // north 1 
-            game.world.cellGrid[cell.y-1][cell.x], // north 
-            game.world.cellGrid[cell.y][cell.x-1], // west
-            game.world.cellGrid[cell.y-1][cell.x-2]]); // north 1 west 2
-          
-        }
-      } else if (cell.x > 3 && cell.y > 2) {
-        patternCells.push.apply(patternCells,
-            [cell, game.world.cellGrid[cell.y-2][cell.x],
-            game.world.cellGrid[cell.y-1][cell.x],
-            game.world.cellGrid[cell.y][cell.x-1],
-            game.world.cellGrid[cell.y][cell.x-2],
-            game.world.cellGrid[cell.y][cell.x-3],
-            game.world.cellGrid[cell.y-1][cell.x-4],
-            game.world.cellGrid[cell.y-3][cell.x-4],
-            game.world.cellGrid[cell.y-3][cell.x-1]]);
+      console.log(game.pattern);
+      switch (game.pattern) {
+        case "cell":
+          patternCells.push(cell);
+          break;
+        case "glider":
+          if ((cell.x > 1 && cell.x < game.cols-2) && 
+            (cell.y > 1 && cell.y < game.rows-2)) {
+            patternCells.push.apply(patternCells,
+              [cell, game.world.cellGrid[cell.y-2][cell.x], // north 1 
+              game.world.cellGrid[cell.y-1][cell.x], // north 
+              game.world.cellGrid[cell.y][cell.x-1], // west
+              game.world.cellGrid[cell.y-1][cell.x-2]]); // north 1 west 2
+            
+          }
+          break;
+        case "lightweight":
+          if (cell.x > 3 && cell.y > 2) {
+            patternCells.push.apply(patternCells,
+                [cell, game.world.cellGrid[cell.y-2][cell.x],
+                game.world.cellGrid[cell.y-1][cell.x],
+                game.world.cellGrid[cell.y][cell.x-1],
+                game.world.cellGrid[cell.y][cell.x-2],
+                game.world.cellGrid[cell.y][cell.x-3],
+                game.world.cellGrid[cell.y-1][cell.x-4],
+                game.world.cellGrid[cell.y-3][cell.x-4],
+                game.world.cellGrid[cell.y-3][cell.x-1]]);
+          }
+          break;
+        case "heavyweight":
+          if (cell.x > 3 && cell.y > 2) {
+            patternCells.push.apply(patternCells,
+                [cell, game.world.cellGrid[cell.y][cell.x-1],
+                game.world.cellGrid[cell.y][cell.x-2],
+                game.world.cellGrid[cell.y][cell.x-3],
+                game.world.cellGrid[cell.y][cell.x-4],
+                game.world.cellGrid[cell.y][cell.x-5],
+                game.world.cellGrid[cell.y-1][cell.x-6],
+                game.world.cellGrid[cell.y-3][cell.x-6],                
+                game.world.cellGrid[cell.y-4][cell.x-4],
+                game.world.cellGrid[cell.y-4][cell.x-3],
+                game.world.cellGrid[cell.y-3][cell.x-1],
+                game.world.cellGrid[cell.y-2][cell.x],
+                game.world.cellGrid[cell.y-1][cell.x]]);
+          }
+          break;
+        default: 
+          console.log("This can't happen unless the dom is infected with space virus.");
       }
-      patternCells.forEach( (cell) => {
+      return patternCells;
+    }
+
+    drawPattern () {
+      console.log("DRAW" + game.enableDraw);
+      if (game.enableDraw === false) { return; }
+      game.calcPattern().forEach( (cell) => {
         cell.revive();
         game.drawCell(cell);
       });
@@ -81,16 +125,6 @@ $(function() {
     handleRandomize () {
       game.world.randomlyPopulate()
       game.drawBoard()
-    }
-
-    reanimateCell () {
-      if (game.enableDraw === true) {
-        let coords = game.getCoords();
-        console.log(coords);
-        let cell = game.world.cellGrid[coords[1]][coords[0]];
-        cell.revive();
-        game.drawCell(cell);
-      }
     }
 
     getCoords () {

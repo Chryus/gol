@@ -10,7 +10,7 @@
   </div>
   <div class="row">
     <div class="col-md-10">
-      <canvas id="canvas" width="1150" height="600"></canvas>
+      <canvas id="canvas" width="1100" height="600"></canvas>
     </div>
     <div class="controls col-md-2">
       <button type="button" class="start btn btn-primary">Start</button>
@@ -19,15 +19,18 @@
       <button type="button" class="randomize btn btn-warning">Randomize</button>
       <input id="ex4" type="text" data-slider-min="1" data-slider-max="20" data-slider-step="1" data-slider-value="5" data-slider-orientation="vertical"/>
       <p>Speed</p>
-      <h4>Add a spaceship</h4>
+      <h4>Patterns of Life</h4>
       <div class="radio">
-        <label><input type="radio" name="optradio"> Glider</label>
+        <label><input type="radio" name="pattern" value="cell" checked> Cell</label>
       </div>
       <div class="radio">
-        <label><input type="radio" name="optradio"> Lightweight Spaceship</label>
+        <label><input type="radio" name="pattern" value="glider"> Glider</label>
       </div>
       <div class="radio">
-        <label><input type="radio" name="optradio"> Future Spaceship</label>
+        <label><input type="radio" name="pattern" value="lightweight"> Lightweight Spaceship</label>
+      </div>
+      <div class="radio">
+        <label><input type="radio" name="pattern" value="heavyweight"> Heavyweight Spaceship</label>
       </div>
     </div>
   </div>

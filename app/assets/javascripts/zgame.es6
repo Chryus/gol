@@ -175,7 +175,7 @@ $(function() {
     calcInterval () {
       clearInterval(game.timer);
       let maxValue = game.velocitySlider.data().sliderMax;
-      game.delay = Math.abs(game.velocitySlider.val() - maxValue) * 10;
+      game.delay = Math.abs(game.velocitySlider.val() - maxValue) * 5;
       if (game.started) game.startTickTimer();
     }
 

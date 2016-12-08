@@ -25,6 +25,8 @@ $(function() {
     }
 
     setEvents () {
+      window.addEventListener('load', this.resize, false);
+      window.addEventListener('resize', this.resize, false);
       $('.start, .stop').on('click', this.handleGameToggle);
       $('.randomize').on('click', this.handleRandomize);
       $('.clear').on('click', this.handleClear);
@@ -44,6 +46,22 @@ $(function() {
         game.enableDraw = false;
       });
       this.velocitySlider.on('change', this.calcInterval);
+    }
+
+    resize() {
+      clearInterval(game.timer);
+      if (game.started == true) { $('.stop').click() };
+      let heightOffset = 200;
+      let controlsWidth = $('.controls').css("width").match(/\d+/g)[0];
+      let rightMargin = $('.controls').css("margin-right").match(/\d+/g)[0];
+      let widthOffset = parseInt(controlsWidth) + parseInt(rightMargin) + 50;
+      canvas.width = game.roundDownToCol(window.innerWidth - widthOffset);
+      canvas.height = game.roundDownToCol(window.innerHeight - heightOffset);
+      game = new Game();
+    }
+
+    roundDownToCol(num) {
+      return Math.floor((num + 1)/game.colWidth)*game.colWidth;
     }
 
     handlePatternSelect () {
@@ -109,7 +127,6 @@ $(function() {
     }
 
     drawPattern () {
-      console.log("DRAW" + game.enableDraw);
       if (game.enableDraw === false) { return; }
       game.calcPattern().forEach( (cell) => {
         cell.revive();

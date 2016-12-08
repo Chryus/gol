@@ -63,6 +63,12 @@ canvas {
   }
 }
 
+@media (max-width: 991px) { 
+  .controls { 
+    margin-left: -2%;
+  }
+}
+
 
 @media (max-width: 768px) {
   .btn {

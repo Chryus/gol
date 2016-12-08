@@ -73,7 +73,7 @@ $(function() {
       return this.cells.filter(cell => cell.alive === true);
     }
 
-    killAllCells () {
+    killAll () {
       this.cells.forEach(cell => { cell.die() });
     }
 

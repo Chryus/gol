@@ -4,22 +4,22 @@ $(function() {
       this.canvas = document.getElementById('canvas');
       this.width = canvas.width;
       this.height = canvas.height;
-      this.ctx = canvas.getContext('2d')
+      this.ctx = canvas.getContext('2d');
       this.colWidth = 10;
       this.rowHeight = 10;
       this.cols = this.width/this.colWidth;
       this.rows = this.height/this.rowHeight;
       this.world = new App.World(this.cols, this.rows);
-      this.cellGrid = this.world.cellGrid;
-      this.cells = this.world.cells;
       this.drawBoard();
       this.callback;
-      this.callbacks = {'tick': this.callBack = () => game.tick()}
+      this.callbacks = {'tick': this.callBack = () => game.tick()};
       this.velocitySlider = $("#ex4").slider({ reversed : true});
       this.revolutions = 0;
       this.started = false;
       this.delay = 150;
       this.enableDraw = false;
+      this.enablePattern = false;
+      this.pattern = null;
       this.timer = null;
       this.setEvents();
     }
@@ -28,19 +28,39 @@ $(function() {
       $('.start, .stop').on('click', this.handleGameToggle);
       $('.randomize').on('click', this.handleRandomize);
       $('.clear').on('click', this.handleClear);
-      $('.glider').on('click', this.handleGlider);
+      $('input').on('click', this.handlePatternSelect);
+      $('canvas').on('click', this.drawPattern);
       $('canvas').on('mousemove', this.reanimateCell);
       $('canvas').mousedown(function () { game.enableDraw = true; });
       $('canvas').mouseup(function () { game.enableDraw = false; });
       this.velocitySlider.on('change', this.calcInterval);
     }
 
-    handleGlider () {
-      console.log("put glider on canvas");
+    handlePatternSelect () {
+      game.pattern = $("input[type=radio]:checked").parent().text().trim();
+      game.enablePattern = true;
+    }
+
+    drawPattern () {
+      if (game.enablePattern === false) { return };
+      if (game.pattern == "Glider") {
+        let patternCells = [];
+        let coords = game.getCoords();
+        let cell = game.world.cellGrid[coords[1]][coords[0]];
+        patternCells.push.apply(patternCells,
+          [cell, game.world.cellGrid[cell.y-2][cell.x], // north 1 
+          game.world.cellGrid[cell.y-1][cell.x], // north 
+          game.world.cellGrid[cell.y][cell.x-1], // west
+          game.world.cellGrid[cell.y-1][cell.x-2]]); // north 1 west 2
+        patternCells.forEach( (cell) => {
+          cell.revive();
+          game.drawCell(cell);
+        });
+      }
     }
 
     handleClear () {
-      game.world.killAllCells();
+      game.world.killAll();
       game.drawBoard();
     }
 
@@ -50,10 +70,10 @@ $(function() {
     }
 
     reanimateCell () {
-      if (game.enableDraw == true) {
+      if (game.enableDraw === true) {
         let coords = game.getCoords();
         console.log(coords);
-        let cell = game.cellGrid[coords[1]][coords[0]];
+        let cell = game.world.cellGrid[coords[1]][coords[0]];
         cell.revive();
         game.drawCell(cell);
       }
@@ -74,11 +94,11 @@ $(function() {
     handleGameToggle () {
       let value = $(this).html()
       let isVisible = $(this).is(':visible')
-      if (value == 'Start' && isVisible) {
+      if (value === 'Start' && isVisible) {
         game.started = true;
         game.calcInterval();
         $('.stop').fadeIn(600);
-      } else if (value == 'Stop' && isVisible) {
+      } else if (value === 'Stop' && isVisible) {
         game.started = false;
         clearInterval(game.timer);
         $('.start').fadeIn(600);
@@ -101,16 +121,16 @@ $(function() {
     tick () {
       let liveCellsNextRound = [];
       let deadCellsNextRound = [];
-      this.cells.forEach( (cell) => {
+      this.world.cells.forEach( (cell) => {
         let neighbors = this.world.liveNeighbors(cell).length;
         let square = (x) => x * x
         if (cell.isAlive() === true) {// rules 1, 2 & 3
-          if (neighbors == 2 || neighbors == 3) {
+          if (neighbors === 2 || neighbors === 3) {
             liveCellsNextRound.push(cell);
           } else {
             deadCellsNextRound.push(cell);
           }
-        } else if (neighbors == 3) { // rule 4
+        } else if (neighbors === 3) { // rule 4
           liveCellsNextRound.push(cell);
         }
       })
@@ -122,8 +142,8 @@ $(function() {
     }
 
     drawBoard () {
-      this.cells.forEach ( (cell) =>  {
-        this.drawCell(cell) 
+      this.world.cells.forEach ( (cell) =>  {
+        this.drawCell(cell);
       });
     }
 
@@ -136,5 +156,6 @@ $(function() {
       );
     }
   }
-  let game = new Game()
+  App['Game'] = Game;
+  let game = new Game();
 })

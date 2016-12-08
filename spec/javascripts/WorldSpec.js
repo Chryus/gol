@@ -1,4 +1,5 @@
 describe("World", function() {
+  var world, cell;
 
   beforeEach(function () {
     world = new App.World(3, 3);
@@ -84,11 +85,11 @@ describe("World", function() {
         world.cellGrid[2][2].die();
         expect(world.liveCells().length).toEqual(1);
 
-        describe("#killAllCells", function() {
+        describe("#killAll", function() {
           
           it("should set alive to false for all cells", function () {
             expect(world.liveCells().length).toEqual(1);
-            world.killAllCells();
+            world.killAll();
             expect(world.liveCells().length).toEqual(0);
           });
         });

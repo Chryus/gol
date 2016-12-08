@@ -62,8 +62,8 @@ $(function() {
           patternCells.push(cell);
           break;
         case "glider":
-          if ((cell.x > 1 && cell.x < game.cols-2) && 
-            (cell.y > 1 && cell.y < game.rows-2)) {
+          if (cell.x > 1 && cell.x < game.cols-2 && 
+            cell.y > 1 && cell.y < game.rows-2) {
             patternCells.push.apply(patternCells,
               [cell, game.world.cellGrid[cell.y-2][cell.x], // north 1 
               game.world.cellGrid[cell.y-1][cell.x], // north 
@@ -86,7 +86,7 @@ $(function() {
           }
           break;
         case "heavyweight":
-          if (cell.x > 3 && cell.y > 2) {
+          if (cell.x > 5 && cell.y > 3 && cell.y < game.rows-1) {
             patternCells.push.apply(patternCells,
                 [cell, game.world.cellGrid[cell.y][cell.x-1],
                 game.world.cellGrid[cell.y][cell.x-2],

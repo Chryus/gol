@@ -18,46 +18,53 @@ $(function() {
       this.started = false;
       this.delay = 150;
       this.enableDraw = false;
-      this.enableOffset = false;
       this.pattern = $("input[type=radio]:checked").val();
+      this.enablePatternOffset = false;
+      this.previousStartPoint = [null, null];
+      this.patternOffset = [0, 0];   
       this.timer = null;
       this.setEvents();
     }
 
     setEvents () {
-      window.addEventListener('load', this.resize, false);
-      window.addEventListener('resize', this.resize, false);
+      $(window).on('load', this.handleResize);
+      $(window).on('resize', this.handleResize);
       $('.start, .stop').on('click', this.handleGameToggle);
       $('.randomize').on('click', this.handleRandomize);
       $('.clear').on('click', this.handleClear);
       $('input').on('click', this.handlePatternSelect);
-      $('canvas').mousedown(function () { 
-        game.enableDraw = true;
-        game.enableOffset = true;
-      });
-      $('canvas').mouseup(function () { 
-        game.enableDraw = false; 
-        game.enableOffset = false; 
-      });
-      $('canvas').mousemove(function () { game.drawPattern(); });
-      $('canvas').click(function () {
-        game.enableDraw = true;
-        game.drawPattern()
-        game.enableDraw = false;
-      });
+      $('canvas').on('mousedown', { val: true }, this.setFlags);
+      $('canvas').on('mouseup', { val: false }, this.setFlags);
+      $('canvas').on('mousemove', this.drawPattern);
+      $('canvas').on('click', this.handleClick);
       this.velocitySlider.on('change', this.calcInterval);
     }
 
-    resize() {
+    handleClick () {
+      game.enableDraw = true;
+      game.drawPattern()
+      game.enableDraw = false;
+    }
+
+    setFlags (event) {
+      game.enableDraw = event.data.val;
+      game.enablePatternOffset = event.data.val;
+    }
+
+    handleResize () {
       clearInterval(game.timer);
       if (game.started == true) { $('.stop').click() };
+      game.resize();
+      game = new Game();
+    }
+
+    resize () {
       let heightOffset = 200;
       let controlsWidth = $('.controls').css("width").match(/\d+/g)[0];
       let rightMargin = $('.controls').css("margin-right").match(/\d+/g)[0];
       let widthOffset = parseInt(controlsWidth) + parseInt(rightMargin) + 50;
       canvas.width = game.roundDownToCol(window.innerWidth - widthOffset);
       canvas.height = game.roundDownToCol(window.innerHeight - heightOffset);
-      game = new Game();
     }
 
     roundDownToCol(num) {
@@ -77,9 +84,11 @@ $(function() {
       console.log(game.pattern);
       switch (game.pattern) {
         case "cell":
+          game.patternOffset = [0,0];
           patternCells.push(cell);
           break;
         case "glider":
+          game.patternOffset = [5,5];
           if (cell.x > 1 && cell.x < game.cols-2 && 
             cell.y > 1 && cell.y < game.rows-2) {
             patternCells.push.apply(patternCells,
@@ -87,10 +96,10 @@ $(function() {
               game.world.cellGrid[cell.y-1][cell.x], // north 
               game.world.cellGrid[cell.y][cell.x-1], // west
               game.world.cellGrid[cell.y-1][cell.x-2]]); // north 1 west 2
-            
           }
           break;
         case "lightweight":
+          game.patternOffset = [5,6];
           if (cell.x > 3 && cell.y > 2) {
             patternCells.push.apply(patternCells,
                 [cell, game.world.cellGrid[cell.y-2][cell.x],
@@ -104,6 +113,7 @@ $(function() {
           }
           break;
         case "heavyweight":
+          game.patternOffset = [9,7];
           if (cell.x > 5 && cell.y > 3 && cell.y < game.rows-1) {
             patternCells.push.apply(patternCells,
                 [cell, game.world.cellGrid[cell.y][cell.x-1],
@@ -128,10 +138,19 @@ $(function() {
 
     drawPattern () {
       if (game.enableDraw === false) { return; }
-      game.calcPattern().forEach( (cell) => {
-        cell.revive();
-        game.drawCell(cell);
-      });
+      
+      let patternArray = game.calcPattern();
+      let currentStartPoint = [patternArray[0].x, patternArray[0].y];
+      let xDiff = Math.abs(currentStartPoint[0] - game.previousStartPoint[0]);
+      let yDiff = Math.abs(currentStartPoint[1] - game.previousStartPoint[1]);
+
+      if (xDiff >= game.patternOffset[0] || yDiff >= game.patternOffset[1]) { 
+        game.previousStartPoint = [patternArray[0].x, patternArray[0].y];
+        patternArray.forEach( (cell) => {
+          cell.revive();
+          game.drawCell(cell);
+        });
+      }
     }
 
     handleClear () {

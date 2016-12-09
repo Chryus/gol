@@ -113,7 +113,7 @@ $(function() {
           }
           break;
         case "heavyweight":
-          game.patternOffset = [9,7];
+          game.patternOffset = [9,8];
           if (cell.x > 5 && cell.y > 3 && cell.y < game.rows-1) {
             patternCells.push.apply(patternCells,
                 [cell, game.world.cellGrid[cell.y][cell.x-1],
@@ -154,6 +154,7 @@ $(function() {
     }
 
     handleClear () {
+      clearInterval(game.timer);
       game.world.killAll();
       game.drawBoard();
     }

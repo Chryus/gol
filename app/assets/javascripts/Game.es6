@@ -1,22 +1,21 @@
 $(function() {
   class Game {
     constructor () {
-      this.canvas = document.getElementById('canvas');
-      this.width = canvas.width;
-      this.height = canvas.height;
-      this.ctx = canvas.getContext('2d');
+      this.revolutions = 0;
+      this.canvas = $('#canvas')[0];
+      this.ctx = this.canvas.getContext('2d');
+      this.width = this.canvas.width;
+      this.height = this.canvas.height;
       this.colWidth = 10;
       this.rowHeight = 10;
       this.cols = this.width/this.colWidth;
       this.rows = this.height/this.rowHeight;
       this.world = new App.World(this.cols, this.rows);
-      this.drawBoard();
       this.callback;
       this.callbacks = {'tick': this.callBack = () => game.tick()};
       this.velocitySlider = $("#ex4").slider({ reversed : true});
-      this.revolutions = 0;
       this.started = false;
-      this.delay = 150;
+      this.tickDelay = 150;
       this.enableDraw = false;
       this.pattern = $("input[type=radio]:checked").val();
       this.enablePatternOffset = false;
@@ -52,10 +51,8 @@ $(function() {
     }
 
     handleResize () {
-      clearInterval(game.timer);
-      if (game.started == true) { $('.stop').click() };
       game.resize();
-      game = new Game();
+      game.drawBoard();   
     }
 
     resize () {
@@ -195,12 +192,12 @@ $(function() {
     calcInterval () {
       clearInterval(game.timer);
       let maxValue = game.velocitySlider.data().sliderMax;
-      game.delay = Math.abs(game.velocitySlider.val() - maxValue) * 5;
+      game.tickDelay = Math.abs(game.velocitySlider.val() - maxValue) * 5;
       if (game.started) game.startTickTimer();
     }
 
     startTickTimer () {
-      this.timer = setInterval(this.callbacks['tick'], this.delay);
+      this.timer = setInterval(this.callbacks['tick'], this.tickDelay);
     }
 
     tick () {
@@ -241,6 +238,5 @@ $(function() {
       );
     }
   }
-  App['Game'] = Game;
   let game = new Game();
-})
+});

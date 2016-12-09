@@ -14,5 +14,8 @@
 //= require bootstrap-sprockets
 //= require jquery_ujs
 //= require turbolinks
+//= require Cell
+//= require World
+//= require Game
 //= require_tree .
 //= require bootstrap-slider

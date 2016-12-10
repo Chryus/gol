@@ -18,9 +18,7 @@ $(function() {
       this.tickDelay = 150;
       this.enableDraw = false;
       this.pattern = $("input[type=radio]:checked").val();
-      this.enablePatternOffset = false;
-      this.previousStartPoint = [null, null];
-      this.patternOffset = [0, 0];   
+      this.previousStartPoint = [0, 0];
       this.timer = null;
       this.setEvents();
     }
@@ -47,7 +45,6 @@ $(function() {
 
     setFlags (event) {
       game.enableDraw = event.data.val;
-      game.enablePatternOffset = event.data.val;
     }
 
     handleResize () {
@@ -62,6 +59,8 @@ $(function() {
       let widthOffset = parseInt(controlsWidth) + parseInt(rightMargin) + 50;
       canvas.width = game.roundDownToCol(window.innerWidth - widthOffset);
       canvas.height = game.roundDownToCol(window.innerHeight - heightOffset);
+      game.world.cols = canvas.width/game.colWidth;
+      game.world.rows = canvas.height/game.rowHeight;
     }
 
     roundDownToCol(num) {
@@ -73,77 +72,17 @@ $(function() {
       game.pattern = name;
     }
 
-    calcPattern () {
-      let midpoint = game.cols/2;
-      let patternCells = [];
-      let coords = game.getCoords();
-      let cell = game.world.cellGrid[coords[1]][coords[0]];
-      console.log(game.pattern);
-      switch (game.pattern) {
-        case "cell":
-          game.patternOffset = [0,0];
-          patternCells.push(cell);
-          break;
-        case "glider":
-          game.patternOffset = [5,5];
-          if (cell.x > 1 && cell.x < game.cols-2 && 
-            cell.y > 1 && cell.y < game.rows-2) {
-            patternCells.push.apply(patternCells,
-              [cell, game.world.cellGrid[cell.y-2][cell.x], // north 1 
-              game.world.cellGrid[cell.y-1][cell.x], // north 
-              game.world.cellGrid[cell.y][cell.x-1], // west
-              game.world.cellGrid[cell.y-1][cell.x-2]]); // north 1 west 2
-          }
-          break;
-        case "lightweight":
-          game.patternOffset = [5,6];
-          if (cell.x > 3 && cell.y > 2) {
-            patternCells.push.apply(patternCells,
-                [cell, game.world.cellGrid[cell.y-2][cell.x],
-                game.world.cellGrid[cell.y-1][cell.x],
-                game.world.cellGrid[cell.y][cell.x-1],
-                game.world.cellGrid[cell.y][cell.x-2],
-                game.world.cellGrid[cell.y][cell.x-3],
-                game.world.cellGrid[cell.y-1][cell.x-4],
-                game.world.cellGrid[cell.y-3][cell.x-4],
-                game.world.cellGrid[cell.y-3][cell.x-1]]);
-          }
-          break;
-        case "heavyweight":
-          game.patternOffset = [9,8];
-          if (cell.x > 5 && cell.y > 3 && cell.y < game.rows-1) {
-            patternCells.push.apply(patternCells,
-                [cell, game.world.cellGrid[cell.y][cell.x-1],
-                game.world.cellGrid[cell.y][cell.x-2],
-                game.world.cellGrid[cell.y][cell.x-3],
-                game.world.cellGrid[cell.y][cell.x-4],
-                game.world.cellGrid[cell.y][cell.x-5],
-                game.world.cellGrid[cell.y-1][cell.x-6],
-                game.world.cellGrid[cell.y-3][cell.x-6],                
-                game.world.cellGrid[cell.y-4][cell.x-4],
-                game.world.cellGrid[cell.y-4][cell.x-3],
-                game.world.cellGrid[cell.y-3][cell.x-1],
-                game.world.cellGrid[cell.y-2][cell.x],
-                game.world.cellGrid[cell.y-1][cell.x]]);
-          }
-          break;
-        default: 
-          console.log("This can't happen unless the dom is infected with space virus.");
-      }
-      return patternCells;
-    }
-
     drawPattern () {
       if (game.enableDraw === false) { return; }
-      
-      let patternArray = game.calcPattern();
-      let currentStartPoint = [patternArray[0].x, patternArray[0].y];
-      let xDiff = Math.abs(currentStartPoint[0] - game.previousStartPoint[0]);
-      let yDiff = Math.abs(currentStartPoint[1] - game.previousStartPoint[1]);
 
-      if (xDiff >= game.patternOffset[0] || yDiff >= game.patternOffset[1]) { 
-        game.previousStartPoint = [patternArray[0].x, patternArray[0].y];
-        patternArray.forEach( (cell) => {
+      let startPoint = game.getStartPoint();
+      let data = game.world.calcPattern(game.pattern, startPoint);
+      let xDiff = Math.abs(startPoint[0] - game.previousStartPoint[0]);
+      let yDiff = Math.abs(startPoint[1] - game.previousStartPoint[1]);
+
+      if (xDiff >= data.XYOffset[0] || yDiff >= data.XYOffset[1]) { 
+        game.previousStartPoint = startPoint;
+        data.cells.forEach( (cell) => {
           cell.revive();
           game.drawCell(cell);
         });
@@ -152,6 +91,7 @@ $(function() {
 
     handleClear () {
       clearInterval(game.timer);
+      $('.start, .stop').click();
       game.world.killAll();
       game.drawBoard();
     }
@@ -161,7 +101,7 @@ $(function() {
       game.drawBoard()
     }
 
-    getCoords () {
+    getStartPoint () {
       let rect = this.canvas.getBoundingClientRect();
       let x = this.normalizeCoord(event.clientX - rect.left);
       let y = this.normalizeCoord(event.clientY - rect.top);

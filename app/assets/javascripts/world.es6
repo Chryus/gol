@@ -1,11 +1,16 @@
 $(function() {
   class World {
+
     constructor (cols, rows) {
       this.cols = cols;
       this.rows = rows;
       this.cells = [];
       this.cellGrid = [];
       this.makeGrid();
+      this.operators = {
+        '+': function(a, b) { return a + b; }, 
+        '-': function(a, b) { return a - b; }
+      }
     }
 
     makeGrid () {
@@ -67,6 +72,66 @@ $(function() {
         if (northwest.isAlive()) liveNeighbors.push(northwest);
       }
       return liveNeighbors;
+    }
+
+    calcPattern (name, startPoint) {
+      let xMidpoint = this.cols/2;
+      let yMidpoint = this.rows/2;
+      let XYOffset = [0, 0];
+      let cells = [];
+      let cell = this.cellGrid[startPoint[1]][startPoint[0]];
+      let xOp = this.operators[cell.x < xMidpoint ? '+' : '-'];
+      let yOp = this.operators[cell.y < yMidpoint ? '+' : '-'];
+      switch (name) {
+        case "cell":
+          cells.push(cell);
+          break;
+        case "glider":
+          if (cell.x > 1 && cell.x < this.cols-2 && cell.y > 1 && cell.y < this.rows-2) {
+            XYOffset = [7, 6];
+            cells.push.apply(cells,
+              [cell, this.cellGrid[yOp(cell.y, 2)][cell.x], // north 1 
+              this.cellGrid[yOp(cell.y, 1)][cell.x], // north 
+              this.cellGrid[cell.y][xOp(cell.x, 1)], // west
+              this.cellGrid[yOp(cell.y, 1)][xOp(cell.x, 2)]]); // north 1 west 2
+          }
+          break;
+        case "lightweight":
+          if (cell.x > 3 && cell.y > 2) {
+            XYOffset = [9, 8];
+            cells.push.apply(cells,
+                [cell, this.cellGrid[yOp(cell.y, 2)][cell.x],
+                this.cellGrid[yOp(cell.y, 1)][cell.x],
+                this.cellGrid[cell.y][xOp(cell.x, 1)],
+                this.cellGrid[cell.y][xOp(cell.x, 2)],
+                this.cellGrid[cell.y][xOp(cell.x, 3)],
+                this.cellGrid[yOp(cell.y, 1)][xOp(cell.x, 4)],
+                this.cellGrid[yOp(cell.y, 3)][xOp(cell.x, 4)],
+                this.cellGrid[yOp(cell.y, 3)][xOp(cell.x, 1)]]);
+          }
+          break;
+        case "heavyweight":
+          if (cell.x > 5 && cell.y > 3 && cell.y < this.rows-1) {
+            XYOffset = [13, 10];
+            cells.push.apply(cells,
+                [cell, this.cellGrid[cell.y][xOp(cell.x, 1)],
+                this.cellGrid[cell.y][xOp(cell.x, 2)],
+                this.cellGrid[cell.y][xOp(cell.x, 3)],
+                this.cellGrid[cell.y][xOp(cell.x, 4)],
+                this.cellGrid[cell.y][xOp(cell.x, 5)],
+                this.cellGrid[yOp(cell.y, 1)][xOp(cell.x, 6)],
+                this.cellGrid[yOp(cell.y, 3)][xOp(cell.x, 6)],                
+                this.cellGrid[yOp(cell.y, 4)][xOp(cell.x, 4)],
+                this.cellGrid[yOp(cell.y, 4)][xOp(cell.x, 3)],
+                this.cellGrid[yOp(cell.y, 3)][xOp(cell.x, 1)],
+                this.cellGrid[yOp(cell.y, 2)][cell.x],
+                this.cellGrid[yOp(cell.y, 1)][cell.x]]);
+          }
+          break;
+        default: 
+          console.log("Boop.");
+      }
+      return { cells: cells, XYOffset: XYOffset };
     }
 
     liveCells() {

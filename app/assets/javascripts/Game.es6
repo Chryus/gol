@@ -30,21 +30,15 @@ $(function() {
       $('.randomize').on('click', this.handleRandomize);
       $('.clear').on('click', this.handleClear);
       $('input').on('click', this.handlePatternSelect);
-      $('canvas').on('mousedown', { val: true }, this.setFlags);
-      $('canvas').on('mouseup', { val: false }, this.setFlags);
+      $('canvas').on('mousedown', this.handleMouseDown);
+      $('canvas').on('mouseup', function () { game.enableDraw = false });
       $('canvas').on('mousemove', this.drawPattern);
-      $('canvas').on('click', this.handleClick);
       this.velocitySlider.on('change', this.calcInterval);
     }
 
-    handleClick () {
+    handleMouseDown () {
       game.enableDraw = true;
       game.drawPattern()
-      game.enableDraw = false;
-    }
-
-    setFlags (event) {
-      game.enableDraw = event.data.val;
     }
 
     handleResize () {
@@ -73,6 +67,7 @@ $(function() {
     }
 
     drawPattern () {
+
       if (game.enableDraw === false) { return; }
 
       let startPoint = game.getStartPoint();

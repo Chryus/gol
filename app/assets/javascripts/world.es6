@@ -90,8 +90,6 @@ $(function() {
 
     getXYOffset (startPoint, direction) {
       let XYOffset = [0, 0];
-      let spaceshipHeight = 0;
-      let spaceshipWidth = 0;
       let addXCushion = this.addXCushion(startPoint, direction)
       switch (this.pattern) {
         case "glider":

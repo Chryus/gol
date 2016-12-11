@@ -77,48 +77,46 @@ $(function() {
       return liveNeighbors;
     }
 
-    withinMidRange (mid, coord) {
-      let min = mid - 3
-      let max = mid + 3
-      return coord >= min && coord <= max;
+    withinYMidRange (yCoord, spaceshipHeight) {
+      let min = this.yMidpoint - spaceshipHeight
+      let max = this.yMidpoint + spaceshipHeight
+      return yCoord >= min && yCoord <= max;
     }
 
     addXCushion(startPoint, direction) {
-      return (direction === 'easterly' && startPoint[0] > this.xMidpoint) ||
-        (direction === 'westerly' && startPoint[0] < this.xMidpoint)
+      return (direction === 'easterly' && startPoint[0] >= this.xMidpoint) ||
+        (direction === 'westerly' && startPoint[0] <= this.xMidpoint)
     }
 
     getXYOffset (startPoint, direction) {
       let XYOffset = [0, 0];
-      let yCushion = 0;
+      let spaceshipHeight = 0;
+      let spaceshipWidth = 0;
       let addXCushion = this.addXCushion(startPoint, direction)
       switch (this.pattern) {
         case "glider":
           XYOffset = [5, 5];
-          yCushion = 1;
           if (addXCushion) {
-            XYOffset[0] += 2;
+            XYOffset[0] += XYOffset[0];
           }
           break;
         case "lightweight":
-          XYOffset = [7, 8];
-          yCushion = 3;
+          XYOffset = [7, 7];          
           if (addXCushion){
-            XYOffset[0] += 4;
+            XYOffset[0] += XYOffset[0];
           }  
           break;
         case "heavyweight":
-          XYOffset = [9, 8];
-          yCushion = 4;
+          XYOffset = [8, 8];
           if (addXCushion){
-            XYOffset[0] += 7;
+            XYOffset[0] += XYOffset[0];
           }
           break;
         default:
           XYOffset;
       }
-      if (this.withinMidRange(this.yMidpoint, startPoint[1])) {
-        XYOffset[1] += yCushion;
+      if (this.withinYMidRange(startPoint[1], XYOffset[1])) {
+        XYOffset[1] += XYOffset[1];
       }
       return XYOffset;
     }
@@ -152,7 +150,7 @@ $(function() {
           }
           break;
         case "heavyweight":
-          if (cell.x > 5 && cell.y > 3 && cell.y < this.rows-1) {
+          if (cell.x > 3 && cell.y > 3 && cell.y < this.rows-1) {
             cells.push.apply(cells,
                 [cell, this.cellGrid[cell.y][xOp(cell.x, 1)],
                 this.cellGrid[cell.y][xOp(cell.x, 2)],

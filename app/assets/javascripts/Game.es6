@@ -68,10 +68,10 @@ $(function() {
     }
 
     
-    withinRange (currentY, previousY) {
+    withinYRange (currentY, previousY) {
       if (currentY === previousY) { return true; }
-      let min = previousY - 5
-      let max = previousY + 5
+      let min = previousY - 8 // large spaceship height
+      let max = previousY + 8
       return currentY >= min && currentY <= max;
     }
 
@@ -81,7 +81,7 @@ $(function() {
       let currentY = startPoint[1];
       let previousY = previousStartPoint[1];
       let direction = null;
-      let yIsInRange = game.withinRange(currentY, previousY);
+      let yIsInRange = game.withinYRange(currentY, previousY);
 
       if (currentX > previousX && yIsInRange) {
         direction = "easterly";

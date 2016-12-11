@@ -17,7 +17,6 @@ $(function() {
       this.started = false;
       this.tickDelay = 150;
       this.enableDraw = false;
-      this.pattern = $("input[type=radio]:checked").val();
       this.previousStartPoint = [0, 0];
       this.timer = null;
       this.setEvents();
@@ -51,33 +50,84 @@ $(function() {
       let controlsWidth = $('.controls').css("width").match(/\d+/g)[0];
       let rightMargin = $('.controls').css("margin-right").match(/\d+/g)[0];
       let widthOffset = parseInt(controlsWidth) + parseInt(rightMargin) + 50;
-      canvas.width = game.roundDownToCol(window.innerWidth - widthOffset);
-      canvas.height = game.roundDownToCol(window.innerHeight - heightOffset);
+      canvas.width = game.roundDownToTen(window.innerWidth - widthOffset);
+      canvas.height = game.roundDownToTen(window.innerHeight - heightOffset);
       game.world.cols = canvas.width/game.colWidth;
       game.world.rows = canvas.height/game.rowHeight;
+      game.world.xMidpoint = game.world.cols/2
+      game.world.yMidpoint = game.world.rows/2
     }
 
-    roundDownToCol(num) {
+    roundDownToTen(num) {
       return Math.floor((num + 1)/game.colWidth)*game.colWidth;
     }
 
     handlePatternSelect () {
       let name = $("input[type=radio]:checked").val();
-      game.pattern = name;
+      game.world.pattern = name;
+    }
+
+    
+    withinRange (currentY, previousY) {
+      if (currentY === previousY) { return true; }
+      let min = previousY - 5
+      let max = previousY + 5
+      return currentY >= min && currentY <= max;
+    }
+
+    getDirection (startPoint, previousStartPoint) {
+      let currentX = startPoint[0];
+      let previousX = previousStartPoint[0];
+      let currentY = startPoint[1];
+      let previousY = previousStartPoint[1];
+      let direction = null;
+      let yIsInRange = game.withinRange(currentY, previousY);
+
+      if (currentX > previousX && yIsInRange) {
+        direction = "easterly";
+      } else if (yIsInRange) {
+        direction = "westerly"
+      } else {
+        direction;
+      }
+
+
+      // if (currentX === previousX && currentY < previousY) {
+      //   direction = "North";
+      // } else if (currentX > previousX && currentY < previousY) {
+      //   direction = "Northeast";
+      // } else if (currentX > previousX && currentY === previousY) {
+      //   direction = "East";
+      // } else if (currentX > previousX && currentY > previousY) {
+      //   direction = "Southeast";
+      // } else if (currentX === previousX && currentY > previousY) {
+      //   direction = "South";
+      // } else if (currentX < previousX && currentY > previousY) {
+      //   direction = "Southwest";
+      // } else if (currentX < previousX && currentY === previousY) {
+      //   direction = "West";
+      // } else if (currentX < previousX && currentY < previousY) {
+      //   direction = "Northwest";
+      // } else { 
+      //   direction = null;
+      // }
+      return direction;
     }
 
     drawPattern () {
-
       if (game.enableDraw === false) { return; }
 
       let startPoint = game.getStartPoint();
-      let data = game.world.calcPattern(game.pattern, startPoint);
       let xDiff = Math.abs(startPoint[0] - game.previousStartPoint[0]);
       let yDiff = Math.abs(startPoint[1] - game.previousStartPoint[1]);
+      let direction = game.getDirection(startPoint, game.previousStartPoint);
 
-      if (xDiff >= data.XYOffset[0] || yDiff >= data.XYOffset[1]) { 
+      let XYOffset = game.world.getXYOffset(startPoint, direction);
+      
+      if (xDiff >= XYOffset[0] || yDiff >= XYOffset[1]) { 
         game.previousStartPoint = startPoint;
-        data.cells.forEach( (cell) => {
+        let cells = game.world.calcPattern(startPoint);
+        cells.forEach( (cell) => {
           cell.revive();
           game.drawCell(cell);
         });

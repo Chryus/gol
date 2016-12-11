@@ -4,6 +4,8 @@ $(function() {
     constructor (cols, rows) {
       this.cols = cols;
       this.rows = rows;
+      this.xMidpoint = cols/2;
+      this.yMidpoint = rows/2;
       this.cells = [];
       this.cellGrid = [];
       this.makeGrid();
@@ -11,6 +13,7 @@ $(function() {
         '+': function(a, b) { return a + b; }, 
         '-': function(a, b) { return a - b; }
       }
+      this.pattern = "cell";
     }
 
     makeGrid () {
@@ -74,21 +77,60 @@ $(function() {
       return liveNeighbors;
     }
 
-    calcPattern (name, startPoint) {
-      let xMidpoint = this.cols/2;
-      let yMidpoint = this.rows/2;
+    withinMidRange (mid, coord) {
+      let min = mid - 3
+      let max = mid + 3
+      return coord >= min && coord <= max;
+    }
+
+    addXCushion(startPoint, direction) {
+      return (direction === 'easterly' && startPoint[0] > this.xMidpoint) ||
+        (direction === 'westerly' && startPoint[0] < this.xMidpoint)
+    }
+
+    getXYOffset (startPoint, direction) {
       let XYOffset = [0, 0];
+      let yCushion = 0;
+      let addXCushion = this.addXCushion(startPoint, direction)
+      switch (this.pattern) {
+        case "glider":
+          XYOffset = [5, 5];
+          yCushion = 1;
+          if (addXCushion) {
+            XYOffset[0] += 2;
+          }
+          break;
+        case "lightweight":
+          XYOffset = [7, 8];
+          yCushion = 3;
+          if (addXCushion){
+            XYOffset[0] += 4;
+          }  
+          break;
+        case "heavyweight":
+          XYOffset = [9, 8];
+          yCushion = 4;
+          if (addXCushion){
+            XYOffset[0] += 7;
+          }
+          break;
+        default:
+          XYOffset;
+      }
+      if (this.withinMidRange(this.yMidpoint, startPoint[1])) {
+        XYOffset[1] += yCushion;
+      }
+      return XYOffset;
+    }
+
+    calcPattern (startPoint) {
       let cells = [];
       let cell = this.cellGrid[startPoint[1]][startPoint[0]];
-      let xOp = this.operators[cell.x < xMidpoint ? '+' : '-'];
-      let yOp = this.operators[cell.y < yMidpoint ? '+' : '-'];
-      switch (name) {
-        case "cell":
-          cells.push(cell);
-          break;
+      let xOp = this.operators[cell.x < this.xMidpoint ? '+' : '-'];
+      let yOp = this.operators[cell.y < this.yMidpoint ? '+' : '-'];
+      switch (this.pattern) {
         case "glider":
           if (cell.x > 1 && cell.x < this.cols-2 && cell.y > 1 && cell.y < this.rows-2) {
-            XYOffset = [7, 6];
             cells.push.apply(cells,
               [cell, this.cellGrid[yOp(cell.y, 2)][cell.x], // north 1 
               this.cellGrid[yOp(cell.y, 1)][cell.x], // north 
@@ -98,7 +140,6 @@ $(function() {
           break;
         case "lightweight":
           if (cell.x > 3 && cell.y > 2) {
-            XYOffset = [9, 8];
             cells.push.apply(cells,
                 [cell, this.cellGrid[yOp(cell.y, 2)][cell.x],
                 this.cellGrid[yOp(cell.y, 1)][cell.x],
@@ -112,7 +153,6 @@ $(function() {
           break;
         case "heavyweight":
           if (cell.x > 5 && cell.y > 3 && cell.y < this.rows-1) {
-            XYOffset = [13, 10];
             cells.push.apply(cells,
                 [cell, this.cellGrid[cell.y][xOp(cell.x, 1)],
                 this.cellGrid[cell.y][xOp(cell.x, 2)],
@@ -129,9 +169,9 @@ $(function() {
           }
           break;
         default: 
-          console.log("Boop.");
+          cells.push(cell);
       }
-      return { cells: cells, XYOffset: XYOffset };
+      return cells;
     }
 
     liveCells() {

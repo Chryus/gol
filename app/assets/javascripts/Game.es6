@@ -30,7 +30,7 @@ $(function() {
       $('.clear').on('click', this.handleClear);
       $('input').on('click', this.handlePatternSelect);
       $('canvas').on('mousedown', this.handleMouseDown);
-      $('canvas').on('mouseup', function () { game.enableDraw = false });
+      $(window).on('mouseup', function () { game.enableDraw = false });
       $('canvas').on('mousemove', this.drawPattern);
       this.velocitySlider.on('change', this.calcInterval);
     }
@@ -90,27 +90,6 @@ $(function() {
       } else {
         direction;
       }
-
-
-      // if (currentX === previousX && currentY < previousY) {
-      //   direction = "North";
-      // } else if (currentX > previousX && currentY < previousY) {
-      //   direction = "Northeast";
-      // } else if (currentX > previousX && currentY === previousY) {
-      //   direction = "East";
-      // } else if (currentX > previousX && currentY > previousY) {
-      //   direction = "Southeast";
-      // } else if (currentX === previousX && currentY > previousY) {
-      //   direction = "South";
-      // } else if (currentX < previousX && currentY > previousY) {
-      //   direction = "Southwest";
-      // } else if (currentX < previousX && currentY === previousY) {
-      //   direction = "West";
-      // } else if (currentX < previousX && currentY < previousY) {
-      //   direction = "Northwest";
-      // } else { 
-      //   direction = null;
-      // }
       return direction;
     }
 

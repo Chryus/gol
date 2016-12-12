@@ -12,10 +12,10 @@
 //
 //= require jquery
 //= require bootstrap-sprockets
+//= require bootstrap-slider
 //= require jquery_ujs
 //= require turbolinks
 //= require Cell
 //= require World
 //= require Game
 //= require_tree .
-//= require bootstrap-slider

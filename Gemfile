@@ -13,11 +13,9 @@ gem 'bootstrap', '~> 4.0.0.alpha5'
 gem 'bootstrap-slider-rails'
 gem 'sass-rails', '~> 5.0'
 
-# use es6
 gem 'sprockets', '>= 3.0.0'
-gem 'sprockets-es6'
-#  transpile ECMAScript6 to JavaScript
-gem 'babel-transpiler'
+# adds CommonJS module support to Sprockets (via Browserify)
+gem "browserify-rails"
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .coffee assets and views
@@ -44,7 +42,10 @@ group :development, :test do
   gem 'byebug', platform: :mri
   gem 'rspec-rails', '~> 3.5'
   gem 'factory_girl_rails'
-  gem "jasmine"
+  gem "teaspoon-jasmine"
+
+  # Teaspoon's front-end is written in CoffeeScript but it's not a dependency
+  gem "coffee-script"
 end
 
 group :development do

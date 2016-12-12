@@ -1,6 +1,5 @@
 $(function() {
   class World {
-
     constructor (cols, rows) {
       this.cols = cols;
       this.rows = rows;

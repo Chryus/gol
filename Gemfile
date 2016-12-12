@@ -16,6 +16,8 @@ gem 'sass-rails', '~> 5.0'
 # use es6
 gem 'sprockets', '>= 3.0.0'
 gem 'sprockets-es6'
+#  transpile ECMAScript6 to JavaScript
+gem 'babel-transpiler'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .coffee assets and views

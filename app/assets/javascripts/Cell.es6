@@ -14,5 +14,5 @@ $(function() {
 
     dead () { return !this.alive; }
   }
-  App['Cell'] = Cell
+  App['Cell'] = Cell;
 });

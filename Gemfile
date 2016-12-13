@@ -13,9 +13,11 @@ gem 'bootstrap', '~> 4.0.0.alpha5'
 gem 'bootstrap-slider-rails'
 gem 'sass-rails', '~> 5.0'
 
+# Gemfile
 gem 'sprockets', '>= 3.0.0'
+gem 'sprockets-es6'
 # adds CommonJS module support to Sprockets (via Browserify)
-gem "browserify-rails"
+#gem "browserify-rails"
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .coffee assets and views

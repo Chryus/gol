@@ -17,6 +17,6 @@
 //= require turbolinks
 //= require_tree .
 
-require("./app/Cell");
-require("./app/World");
-require("./app/Game");
+require("./Cell.es6");
+require("./World.es6");
+require("./Game.es6");

@@ -17,7 +17,7 @@ module Gol
 	config.assets.paths << Rails.root.join('node_modules')
 
 	# Configure Browserify to use babelify to compile ES6
-	config.browserify_rails.commandline_options = "-t [ babelify --presets [ es2015 ] ]"
+	config.browserify_rails.commandline_options = "-t [ babelify --presets [ es2015 ] --extensions .es6]"
 
 	# Run on all javascript files
 	config.browserify_rails.force = true

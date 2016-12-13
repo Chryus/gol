@@ -1,4 +1,4 @@
-import Cell from './Cell';
+import Cell from './Cell.es6';
 
 class World {
   constructor (cols, rows) {

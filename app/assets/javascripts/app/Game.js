@@ -1,3 +1,5 @@
+import World from './World';
+
 $(function() {
   class Game {
     constructor () {
@@ -10,7 +12,7 @@ $(function() {
       this.rowHeight = 10;
       this.cols = this.width/this.colWidth;
       this.rows = this.height/this.rowHeight;
-      this.world = new App.World(this.cols, this.rows);
+      this.world = new World(this.cols, this.rows);
       this.callback;
       this.callbacks = {'tick': this.callBack = () => game.tick()};
       this.velocitySlider = $("#ex4").slider({ reversed : true});

@@ -22,6 +22,9 @@ module Gol
 	# Run on all javascript files
 	config.browserify_rails.force = true
 
+	# defaults to Rails.env
+  config.browserify_rails.node_env = "production"
+
 	# Alternatively, only run on .es6 files
 	# config.browserify_rails.force = ->(file) { File.extname(file) == ".es6" }
 

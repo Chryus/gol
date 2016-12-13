@@ -105,7 +105,7 @@ class World {
         }  
         break;
       case "heavyweight":
-        XYOffset = [8, 8];
+        XYOffset = [9, 8];
         if (addXCushion){
           XYOffset[0] += XYOffset[0];
         }

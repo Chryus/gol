@@ -21,6 +21,7 @@ $(function() {
       this.enableDraw = false;
       this.previousStartPoint = [0, 0];
       this.timer = null;
+      this.drawBoard();
       this.setEvents();
     }
 

@@ -10,6 +10,7 @@ gem 'pg'
 gem 'puma', '~> 3.0'
 # Use SCSS for stylesheets
 gem 'bootstrap', '~> 4.0.0.alpha5'
+gem 'rails-assets-tether', '>= 1.1.0'
 gem 'bootstrap-slider-rails'
 gem 'sass-rails', '~> 5.0'
 

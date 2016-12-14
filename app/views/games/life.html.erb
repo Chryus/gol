@@ -3,8 +3,8 @@
     <div class="col-md-12">
       <header>
         <h1>Game of Life</h1>
-        <p>Conway's Game of Life on Rails</p>
-        <p>Revolutions: <span id="revolutions">0</span></p>
+        <p class='subhead'>Conway's Game of Life on Rails</p>
+        <p class='subhead'>Revolutions: <span id="revolutions">0</span></p>
       </header>
     </div>
   </div>
@@ -18,7 +18,7 @@
       <button type="button" class="clear btn btn-warning">Clear</button>
       <button type="button" class="randomize btn btn-warning">Randomize</button>
       <input id="ex4" type="text" data-slider-min="1" data-slider-max="20" data-slider-step="1" data-slider-value="5" data-slider-orientation="vertical"/>
-      <p>Speed</p></br>
+      <p class="speed">Speed</p></br>
       <h4>Patterns of Life</h4>
       <div class="radio">
         <label><input type="radio" name="pattern" value="cell" checked> Cell</label>
@@ -31,6 +31,11 @@
       </div>
       <div class="radio">
         <label><input type="radio" name="pattern" value="heavyweight"> Heavyweight Spaceship</label>
+      </div>
+      <div class='legend-container'>
+        <canvas id="legend" width="20" height="50"></canvas>
+        <p class="legend-name">Dead Cell</p>
+        <p class="legend-name">Live Cell</p>
       </div>
     </div>
   </div>

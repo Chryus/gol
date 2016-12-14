@@ -1,11 +1,14 @@
 import World from './World.es6';
+import Cell from './Cell.es6';
 
 $(function() {
   class Game {
     constructor () {
       this.revolutions = 0;
       this.canvas = $('#canvas')[0];
+      this.legend = $('#legend')[0];
       this.ctx = this.canvas.getContext('2d');
+      this.legendCtx = this.legend.getContext('2d');
       this.width = this.canvas.width;
       this.height = this.canvas.height;
       this.colWidth = 10;
@@ -21,7 +24,8 @@ $(function() {
       this.enableDraw = false;
       this.previousStartPoint = [0, 0];
       this.timer = null;
-      this.drawBoard();
+      this.world.randomlyPopulate();
+      this.drawLegend();
       this.setEvents();
     }
 
@@ -40,12 +44,12 @@ $(function() {
 
     handleMouseDown () {
       game.enableDraw = true;
-      game.drawPattern()
+      game.drawPattern();
     }
 
     handleResize () {
       game.resize();
-      game.drawBoard();   
+      game.drawBoard();
     }
 
     resize () {
@@ -55,8 +59,10 @@ $(function() {
       let widthOffset = parseInt(controlsWidth) + parseInt(rightMargin) + 50;
       canvas.width = game.roundDownToTen(window.innerWidth - widthOffset);
       canvas.height = game.roundDownToTen(window.innerHeight - heightOffset);
-      game.world.cols = canvas.width/game.colWidth;
-      game.world.rows = canvas.height/game.rowHeight;
+      game.cols = canvas.width/game.colWidth;
+      game.rows = canvas.height/game.rowHeight;
+      game.world.cols = game.cols;
+      game.world.rows = game.rows;
       game.world.xMidpoint = game.world.cols/2
       game.world.yMidpoint = game.world.rows/2
     }
@@ -111,7 +117,7 @@ $(function() {
         let cells = game.world.calcPattern(startPoint);
         cells.forEach( (cell) => {
           cell.revive();
-          game.drawCell(cell);
+          game.drawCell(cell, game.ctx);
         });
       }
     }
@@ -124,8 +130,8 @@ $(function() {
     }
 
     handleRandomize () {
-      game.world.randomlyPopulate()
-      game.drawBoard()
+      game.world.randomlyPopulate();
+      game.drawBoard();
     }
 
     getStartPoint () {
@@ -192,13 +198,20 @@ $(function() {
 
     drawBoard () {
       this.world.cells.forEach ( (cell) =>  {
-        this.drawCell(cell);
+        this.drawCell(cell, this.ctx);
       });
     }
 
-    drawCell (cell) {
-      this.ctx.fillStyle = cell.isAlive() ? '#0ff' : '#fa00ff';
-      this.ctx.fillRect(cell.x * this.colWidth, 
+    drawLegend () {
+      let deadCell = new Cell(false, .4, .5);
+      let liveCell = new Cell(true, .4, 3.25);
+      this.drawCell(deadCell, this.legendCtx);
+      this.drawCell(liveCell, this.legendCtx)
+    }
+
+    drawCell (cell, context) {
+      context.fillStyle = cell.isAlive() ? '#0ff' : '#fa00ff';
+      context.fillRect(cell.x * this.colWidth, 
         cell.y * this.rowHeight, 
         this.colWidth - 1, 
         this.rowHeight - 1

@@ -32,9 +32,9 @@ header {
 
 .stop { display: none; }
 
-p { margin-top: -3px; }
+p .subhead { margin-top: -3px; }
 
-canvas {
+#canvas {
   position: absolute;
   padding-left: 0;
   padding-right: 0;
@@ -43,18 +43,32 @@ canvas {
   clear: both;
 }
 
+.legend-container {
+  margin-top: 7%;
+}
+
+#legend {
+  top: 3px;
+  position: relative;
+  float: left;
+}
+
+p.legend-name {
+  position: relative;
+  margin-bottom: 3.5px;
+}
+
 .controls {
   float: right;
   margin-right: 2%;
   padding: 1%;
   background: lightgoldenrodyellow;
   border-radius: 10px;
-  p {
+  .speed {
     position: relative;
     top: 12px;
   }
 }
-
 
 .slider {
   display: block;

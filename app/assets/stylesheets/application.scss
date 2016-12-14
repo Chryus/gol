@@ -56,6 +56,11 @@ p.subhead { margin-top: -3px; }
   }
 }
 
+.controls h4 {
+  position: relative;
+  margin-top: 10%;
+}
+
 .legend-container {
   margin-top: 7%;
 }
@@ -75,11 +80,6 @@ p.legend-name {
   display: block;
 }
 
-.instructions {
-  margin-top: 3%;
-  font-weight: bold;
-}
-
 @media (max-width: 1221px) { 
   .btn { 
     margin-left: 4%;
@@ -87,16 +87,25 @@ p.legend-name {
   }
 }
 
+
 @media (max-width: 991px) { 
-  .controls { 
+  .controls {
     margin-left: -2%;
   }
 }
 
-
-@media (max-width: 768px) {
+@media (max-width: 1100px) {
+  .controls { width: 20%; }
   .btn {
     float: right;
     margin-bottom: 1.5%;
   }
+}
+
+@media (max-width: 768px) {
+  .controls { width: 30%; }
+}
+
+@media (max-width: 540px) {
+  .controls { width: 40%; }
 }

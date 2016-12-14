@@ -32,7 +32,7 @@ header {
 
 .stop { display: none; }
 
-p .subhead { margin-top: -3px; }
+p.subhead { margin-top: -3px; }
 
 #canvas {
   position: absolute;
@@ -41,6 +41,19 @@ p .subhead { margin-top: -3px; }
   display: block;
   background: black;
   clear: both;
+}
+
+.controls {
+  float: right;
+  margin-right: 2%;
+  padding: 1%;
+  background: lightgoldenrodyellow;
+  border-radius: 10px;
+  .speed {
+    position: relative;
+    top: 10px;
+    margin-bottom: 8px;
+  }
 }
 
 .legend-container {
@@ -58,20 +71,13 @@ p.legend-name {
   margin-bottom: 3.5px;
 }
 
-.controls {
-  float: right;
-  margin-right: 2%;
-  padding: 1%;
-  background: lightgoldenrodyellow;
-  border-radius: 10px;
-  .speed {
-    position: relative;
-    top: 12px;
-  }
-}
-
 .slider {
   display: block;
+}
+
+.instructions {
+  margin-top: 3%;
+  font-weight: bold;
 }
 
 @media (max-width: 1221px) { 

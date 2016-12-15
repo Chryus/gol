@@ -2,25 +2,21 @@
 
 Game of Life on Rails
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+* Ruby 2.3.0
+* Rails 5.0.0.1
+* Node 6.9.1
+* PostgreSQL 9.4.8 (No DB necessary at the point)
 
-Things you may want to cover:
+Conway's Game of Life implemented with ES6 modules transpiled through npm and babel via browserify gem.
 
-* Ruby version
+* To set up npm in Rails follow these steps:
 
-* System dependencies
+http://ricostacruz.com/til/npm-in-rails
 
-* Configuration
+* To set up browserify-rails:
 
-* Database creation
+http://collectiveidea.com/blog/archives/2016/03/09/modern-javascript-and-rails
 
-* Database initialization
+To run jasmine specs: 
 
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+rake teaspoon

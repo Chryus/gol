@@ -1,8 +1,10 @@
+import Cell from "../../app/assets/javascripts/Cell.es6";
+
 describe("Cell", function() {
   var cell;
 
   beforeEach(function() {
-    cell = new App.Cell(false, 1, 1);
+    cell = new Cell(false, 1, 1);
   });
 
   it("should respond properly to methods", function () {

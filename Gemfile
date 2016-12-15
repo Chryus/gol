@@ -16,7 +16,8 @@ gem 'sass-rails', '~> 5.0'
 
 # Gemfile
 gem 'sprockets', '>= 3.0.0'
-# adds CommonJS module support to Sprockets (via Browserify)
+# adds CommonJS module support to Sprockets (via Browserify) & intercepts 
+# requests for Javascript files to pre-process through npm and babel via the the browserify library
 gem "browserify-rails"
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'

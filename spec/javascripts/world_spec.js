@@ -1,8 +1,12 @@
+import Cell from "../../app/assets/javascripts/Cell.es6";
+import World from "../../app/assets/javascripts/World.es6";
+import Helper from './helper';
+
 describe("World", function() {
-  var world, cell;
+  var world, cell, helper;
 
   beforeEach(function () {
-    world = new App.World(3, 3);
+    world = new World(3, 3);
   });
 
   it("should respond to proper methods", function() {
@@ -15,11 +19,12 @@ describe("World", function() {
   describe("upon initialization", function() {
     describe("#makeGrid", function () {
       it("should assign 2D array of cell objects to the cellGrid attribute", function () {
-        world = new App.World(3, 3);
+        world = new World(3, 3);
+        helper = new Helper();
         expect(world.cellGrid).toEqual(jasmine.any(Array));
         expect(world.cellGrid[0]).toEqual(jasmine.any(Array));
         expect(world.cellGrid.length).toEqual(3);
-        expect(world.cells[getRandomInt(0, world.cells.length)]).toEqual(jasmine.any(App.Cell));
+        expect(world.cells[helper.getRandomInt(0, world.cells.length)]).toEqual(jasmine.any(Cell));
         expect(world.cells.length).toEqual(9);
       });
     });

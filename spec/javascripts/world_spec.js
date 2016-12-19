@@ -79,6 +79,14 @@ describe("World", () => {
   });
 
   describe("counting and killing cells", () => {
+
+    describe("randomlyPopulate", () => {
+      it("should make at least some cells alive", () => {
+        expect(world.liveCells().length).toEqual(0);
+        world.randomlyPopulate();
+        expect(world.liveCells().length).toBeGreaterThan(0);
+      })
+    })
     
     describe("#liveCells", () => {
       
@@ -98,6 +106,59 @@ describe("World", () => {
             expect(world.liveCells().length).toEqual(0);
           });
         });
+      });
+    });
+  });
+
+  describe("#calcPattern", () => {
+    it("should return an array of four cells for a glider pattern, with the first cell equal to the input", () => {
+      world = new World(10, 10);
+      world.pattern = 'glider';
+      expect(world.calcPattern([5, 5]).length).toEqual(5);
+      expect(world.calcPattern([5, 5])[0].x).toEqual(5);
+      expect(world.calcPattern([5, 5])[0].y).toEqual(5);
+    });
+
+    it("should return an array of four cells for a glider pattern", () => {
+      world = new World(10, 10);
+      world.pattern = 'lightweight';
+      expect(world.calcPattern([5, 5]).length).toEqual(9);
+      expect(world.calcPattern([5, 5])[0].x).toEqual(5);
+      expect(world.calcPattern([5, 5])[0].y).toEqual(5);
+    });
+
+    it("should return an array of four cells for a glider pattern", () => {
+      world = new World(10, 10);
+      world.pattern = 'heavyweight';
+      expect(world.calcPattern([5, 5]).length).toEqual(13);
+      expect(world.calcPattern([5, 5])[0].x).toEqual(5);
+      expect(world.calcPattern([5, 5])[0].y).toEqual(5);
+    });
+
+
+    describe("X input is out of bounds", () => {
+      it("should return an empty array if glider x startpoint is less than or equal to one", () => {
+        world = new World(10, 10);
+        world.pattern = 'glider';
+        expect(world.calcPattern([1, 5]).length).toEqual(0);
+      });
+
+      it("should return an empty array if lightweight x startpoint is less than or equal to 2", () => {
+        world = new World(10, 10);
+        world.pattern = 'lightweight';
+        expect(world.calcPattern([2, 5]).length).toEqual(0);
+      });
+
+      it("should return an empty array if heavyweight x startpoint is less than or equal to 2", () => {
+        world = new World(10, 10);
+        world.pattern = 'heavyweight';
+        expect(world.calcPattern([2, 5]).length).toEqual(0);
+      });
+
+      it("should return an empty array if glider x startpoint is greater than cols - 2", () => {
+        world = new World(10, 10);
+        world.pattern = 'glider';
+        expect(world.calcPattern([8, 5]).length).toEqual(0);
       });
     });
   });

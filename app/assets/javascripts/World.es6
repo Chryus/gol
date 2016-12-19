@@ -77,6 +77,20 @@ class World {
     return liveNeighbors;
   }
 
+  liveCells() {
+    return this.cells.filter(cell => cell.alive === true);
+  }
+
+  killAll () {
+    this.cells.forEach(cell => { cell.die() });
+  }
+
+  randomlyPopulate () {
+    this.cells.forEach(cell => {
+      cell.alive = !!Math.floor(Math.random() * 2);
+    })
+  }
+
   withinYMidRange (yCoord, spaceshipHeight) {
     let min = this.yMidpoint - spaceshipHeight
     let max = this.yMidpoint + spaceshipHeight
@@ -93,7 +107,7 @@ class World {
     let addXCushion = this.addXCushion(startPoint, direction)
     switch (this.pattern) {
       case "glider":
-        XYOffset = [5, 5];
+        XYOffset = [5, 6];
         if (addXCushion) {
           XYOffset[0] += XYOffset[0];
         }
@@ -168,20 +182,6 @@ class World {
         cells.push(cell);
     }
     return cells;
-  }
-
-  liveCells() {
-    return this.cells.filter(cell => cell.alive === true);
-  }
-
-  killAll () {
-    this.cells.forEach(cell => { cell.die() });
-  }
-
-  randomlyPopulate () {
-    this.cells.forEach(cell => {
-      cell.alive = !!Math.floor(Math.random() * 2);
-    })
   }
 }
 

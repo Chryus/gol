@@ -111,54 +111,72 @@ describe("World", () => {
   });
 
   describe("#calcPattern", () => {
-    it("should return an array of four cells for a glider pattern, with the first cell equal to the input", () => {
+
+    beforeEach(() => {
       world = new World(10, 10);
-      world.pattern = 'glider';
-      expect(world.calcPattern([5, 5]).length).toEqual(5);
-      expect(world.calcPattern([5, 5])[0].x).toEqual(5);
-      expect(world.calcPattern([5, 5])[0].y).toEqual(5);
     });
 
-    it("should return an array of four cells for a glider pattern", () => {
-      world = new World(10, 10);
-      world.pattern = 'lightweight';
-      expect(world.calcPattern([5, 5]).length).toEqual(9);
-      expect(world.calcPattern([5, 5])[0].x).toEqual(5);
-      expect(world.calcPattern([5, 5])[0].y).toEqual(5);
-    });
+    describe("glider spaceship", () => {
 
-    it("should return an array of four cells for a glider pattern", () => {
-      world = new World(10, 10);
-      world.pattern = 'heavyweight';
-      expect(world.calcPattern([5, 5]).length).toEqual(13);
-      expect(world.calcPattern([5, 5])[0].x).toEqual(5);
-      expect(world.calcPattern([5, 5])[0].y).toEqual(5);
-    });
-
-
-    describe("X input is out of bounds", () => {
-      it("should return an empty array if glider x startpoint is less than or equal to one", () => {
-        world = new World(10, 10);
+      beforeEach(() => {
         world.pattern = 'glider';
+      });
+
+      it("should return an array of 4 cells for a glider pattern, with the first cell equal to the input", () => {
+        expect(world.calcPattern([5, 5]).length).toEqual(5);
+        expect(world.calcPattern([5, 5])[0].x).toEqual(5);
+        expect(world.calcPattern([5, 5])[0].y).toEqual(5);
+      });
+
+       it("should return an empty array if X startpoint is less than or equal to one", () => {
         expect(world.calcPattern([1, 5]).length).toEqual(0);
       });
 
-      it("should return an empty array if lightweight x startpoint is less than or equal to 2", () => {
-        world = new World(10, 10);
+      it("should return an empty array if Y startpoint is less than or equal to one", () => {
+        expect(world.calcPattern([1, 1]).length).toEqual(0);
+      });
+    });
+
+    describe("lightweight spaceship", () => {
+
+      beforeEach(() => {
         world.pattern = 'lightweight';
-        expect(world.calcPattern([2, 5]).length).toEqual(0);
       });
 
-      it("should return an empty array if heavyweight x startpoint is less than or equal to 2", () => {
-        world = new World(10, 10);
+      it("should return an array of 9 cells for a lightweight pattern", () => {
+        expect(world.calcPattern([5, 5]).length).toEqual(9);
+        expect(world.calcPattern([5, 5])[0].x).toEqual(5);
+        expect(world.calcPattern([5, 5])[0].y).toEqual(5);
+      });
+
+      it("should return an empty array if X startpoint is less than or equal to 3", () => {
+        expect(world.calcPattern([3, 5]).length).toEqual(0);
+      });
+
+      it("should return an empty array if Y startpoint is less than or equal to 2", () => {
+        world.pattern = 'lightweight';
+        expect(world.calcPattern([3, 2]).length).toEqual(0);
+      });
+    });
+
+    describe("heavyweight spaceship", () => {
+
+      beforeEach(() => {
         world.pattern = 'heavyweight';
-        expect(world.calcPattern([2, 5]).length).toEqual(0);
       });
 
-      it("should return an empty array if glider x startpoint is greater than cols - 2", () => {
-        world = new World(10, 10);
-        world.pattern = 'glider';
-        expect(world.calcPattern([8, 5]).length).toEqual(0);
+      it("should return an array of 13 cells for a heavyweight pattern", () => {
+        expect(world.calcPattern([5, 5]).length).toEqual(13);
+        expect(world.calcPattern([5, 5])[0].x).toEqual(5);
+        expect(world.calcPattern([5, 5])[0].y).toEqual(5);
+      });
+
+      it("should return an empty array if heavyweight X startpoint is less than or equal to 3", () => {
+        expect(world.calcPattern([3, 5]).length).toEqual(0);
+      });
+
+      it("should return an empty array if heavyweight Y startpoint is greater than rows - 1", () => {
+        expect(world.calcPattern([8, 9]).length).toEqual(0);
       });
     });
   });

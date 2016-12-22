@@ -180,4 +180,31 @@ describe("World", () => {
       });
     });
   });
+
+  describe("fetching operators", () => {
+    it("should retrieve a function to calc the sum of two integers", () => {
+      let plus = world.operators['+'];
+      expect(plus(5, 10)).toEqual(15);
+    });
+
+    it("should retrieve a function to calc the difference of two integers", () => {
+      let plus = world.operators['-'];
+      expect(plus(5, 10)).toEqual(-5);
+    });
+  });
+
+  describe("#addXCushion", () => {
+
+    it("should return true if direction is easterly and X startpoint greater than the X midpoint", () => {
+      world.xMidpoint = 5;
+      expect(world.addXCushion([3,5], 'easterly')).toEqual(false);
+      expect(world.addXCushion([6,5], 'easterly')).toEqual(true);
+    });
+
+    it("should return true if direction is westerly and X startpoint less than the X midpoint", () => {
+      world.xMidpoint = 5;
+      expect(world.addXCushion([3,5], 'westerly')).toEqual(true);
+      expect(world.addXCushion([6,5], 'westerly')).toEqual(false);
+    });
+  });
 });

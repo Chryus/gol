@@ -14,6 +14,7 @@ class World {
       '-': function(a, b) { return a - b; }
     }
     this.pattern = "cell";
+    this.direction = null;
   }
 
   makeGrid () {
@@ -88,7 +89,7 @@ class World {
   randomlyPopulate () {
     this.cells.forEach(cell => {
       cell.alive = !!Math.floor(Math.random() * 2);
-    })
+    });
   }
 
   withinYMidRange (yCoord, spaceshipHeight) {

@@ -207,4 +207,104 @@ describe("World", () => {
       expect(world.addXCushion([6,5], 'westerly')).toEqual(false);
     });
   });
+
+  describe("#withinYMidRange", () => {
+    it("should return true if the y coordinate is within +- spaceship height of the y midpoint", () => {
+      world.yMidpoint = 5;
+      expect(world.withinYMidRange(2, 2)).toEqual(false);
+      expect(world.withinYMidRange(3, 2)).toEqual(true);
+      expect(world.withinYMidRange(7, 2)).toEqual(true);
+      expect(world.withinYMidRange(8, 2)).toEqual(false);
+    });
+  });
+
+  describe("#getXYOffset", () => {
+
+    beforeEach(() => {
+      world = new World(20, 20);
+    });
+
+    describe("glider spaceship", () => {
+
+      beforeEach(() => {
+        world.pattern = 'glider';
+      });
+
+      describe("when addXCushion and withinYMidRange are both false", () => {
+        it("should return an array with the xy offset for a start point", () => {
+          expect(world.getXYOffset([12, 2], 'westerly')).toEqual([5, 6])
+        });
+      });
+
+      describe("when addXCushion is true", () => {
+        it("should return an array with the xy offset for a start point", () => {
+          expect(world.getXYOffset([8, 2], 'westerly')).toEqual([10, 6])
+        });
+      });
+
+      describe("when addXCushion and withinYMidRange are both true", () => {
+        it("should return an array with the xy offset for a start point", () => {
+           expect(world.getXYOffset([8, 15], 'westerly')).toEqual([10, 12])
+        });
+      });
+    }); 
+
+    describe("lightweight spaceship", () => {
+
+      beforeEach(() => {
+        world.pattern = 'lightweight';
+      });
+
+      describe("when addXCushion and withinYMidRange are both false", () => {
+        it("should return an array with the xy offset for a start point", () => {
+          expect(world.getXYOffset([12, 2], 'westerly')).toEqual([7, 7])
+        });
+      });
+
+      describe("when addXCushion is true", () => {
+        it("should return an array with the xy offset for a start point", () => {
+          expect(world.getXYOffset([8, 2], 'westerly')).toEqual([14, 7])
+        });
+      });
+
+      describe("when addXCushion and withinYMidRange are both true", () => {
+        it("should return an array with the xy offset for a start point", () => {
+           expect(world.getXYOffset([8, 15], 'westerly')).toEqual([14, 14])
+        });
+      });
+
+    });
+
+    describe("heavyweight spaceship", () => {
+
+      beforeEach(() => {
+        world.pattern = 'heavyweight';
+      });
+
+      describe("when addXCushion and withinYMidRange are both false", () => {
+        it("should return an array with the xy offset for a start point", () => {
+          expect(world.getXYOffset([12, 1], 'westerly')).toEqual([9, 8])
+        });
+      });
+
+      describe("when addXCushion is true", () => {
+        it("should return an array with the xy offset for a start point", () => {
+          expect(world.getXYOffset([8, 1], 'westerly')).toEqual([18, 8])
+        });
+      });
+
+      describe("when addXCushion and withinYMidRange are both true", () => {
+        it("should return an array with the xy offset for a start point", () => {
+           expect(world.getXYOffset([8, 15], 'westerly')).toEqual([18, 16])
+        });
+      });
+
+    }); 
+
+    describe("default spaceship", () => {
+      it("should return an array with the xy offset for a start point", () => {
+        expect(world.getXYOffset([12, 2], 'westerly')).toEqual([0, 0])
+      });
+    });
+  });
 });

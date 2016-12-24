@@ -1,9 +1,11 @@
 import World from './World.es6';
 import Cell from './Cell.es6';
+import GameHelper from './GameHelper.es6';
 
 $(function() {
   class Game {
     constructor () {
+      this.helper = new GameHelper();
       this.revolutions = 0;
       this.canvas = $('#canvas')[0];
       this.ctx = this.canvas.getContext('2d');
@@ -54,8 +56,8 @@ $(function() {
       let controlsWidth = $('.controls').css("width").match(/\d+/g)[0];
       let rightMargin = $('.controls').css("margin-right").match(/\d+/g)[0];
       let widthOffset = parseInt(controlsWidth) + parseInt(rightMargin) + 50;
-      canvas.width = game.roundDownToTen(window.innerWidth - widthOffset);
-      canvas.height = game.roundDownToTen(window.innerHeight - heightOffset);
+      canvas.width = game.helper.roundDownToTen(window.innerWidth - widthOffset);
+      canvas.height = game.helper.roundDownToTen(window.innerHeight - heightOffset);
       game.cols = canvas.width/game.colWidth;
       game.rows = canvas.height/game.rowHeight;
       game.world.cols = game.cols;
@@ -64,39 +66,10 @@ $(function() {
       game.world.yMidpoint = game.world.rows/2
     }
 
-    roundDownToTen(num) {
-      return Math.floor((num + 1)/game.colWidth)*game.colWidth;
-    }
 
     handlePatternSelect () {
       let name = $("input[type=radio]:checked").val();
       game.world.pattern = name;
-    }
-
-    
-    currentYInRange (currentY, previousY) {
-      if (currentY === previousY) { return true; }
-      let min = previousY - 8 // large spaceship height
-      let max = previousY + 8
-      return currentY >= min && currentY <= max;
-    }
-
-    getDirection (startPoint, previousStartPoint) {
-      let currentX = startPoint[0];
-      let previousX = previousStartPoint[0];
-      let currentY = startPoint[1];
-      let previousY = previousStartPoint[1];
-      let direction = null;
-      let currentYInRange = game.currentYInRange(currentY, previousY);
-
-      if (currentX > previousX && currentYInRange) {
-        direction = "easterly";
-      } else if (currentYInRange) {
-        direction = "westerly"
-      } else {
-        direction;
-      }
-      return direction;
     }
 
     drawPattern () {
@@ -105,7 +78,7 @@ $(function() {
       let startPoint = game.getStartPoint();
       let xDiff = Math.abs(startPoint[0] - game.previousStartPoint[0]);
       let yDiff = Math.abs(startPoint[1] - game.previousStartPoint[1]);
-      let direction = game.getDirection(startPoint, game.previousStartPoint);
+      let direction = game.helper.getDirection(startPoint, game.previousStartPoint);
 
       let XYOffset = game.world.getXYOffset(startPoint, direction);
       
@@ -133,14 +106,10 @@ $(function() {
 
     getStartPoint () {
       let rect = this.canvas.getBoundingClientRect();
-      let x = this.normalizeCoord(event.clientX - rect.left);
-      let y = this.normalizeCoord(event.clientY - rect.top);
+      let x = this.helper.normalizeCoord(event.clientX - rect.left);
+      let y = this.helper.normalizeCoord(event.clientY - rect.top);
       console.log("x: " + x + " y: " + y);
       return [x, y];
-    }
-
-    normalizeCoord (coord) {
-      return coord < 10 ? 0 : Math.floor(coord/10);
     }
 
     handleGameToggle () {
